@@ -2,8 +2,6 @@ package com.puzzle.api.config;
 
 import com.puzzle.api.exception.UnknownException;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.boot.env.PropertiesPropertySourceLoader;
-import org.springframework.boot.env.PropertySourceLoader;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
@@ -14,8 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DataSourcePropertyLoader implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
-
-    private final PropertySourceLoader loader = new PropertiesPropertySourceLoader();
     final String ENV_DB_USERNAME = "DB_USERNAME";
     final String ENV_DB_PASSWORD = "DB_PASSWORD";
     final String ENV_JDBC_URL = "DB_JDBC_URL";
@@ -50,14 +46,14 @@ public class DataSourcePropertyLoader implements ApplicationListener<Application
         final String driverClassName = System.getenv(ENV_DB_DRIVER_CLASS) == null ? (jdbcUrl.startsWith("jdbc:mysql") ? com.mysql.cj.jdbc.Driver.class.getName() : System.getenv(ENV_DB_DRIVER_CLASS)) : System.getenv(ENV_DB_DRIVER_CLASS);
         final int maxConnectionSize = System.getenv(ENV_DB_MAX_CONNECTION_SIZE) == null ? 20 : Integer.parseInt(System.getenv(ENV_DB_MAX_CONNECTION_SIZE));
         final Map<String, Object> properties = new HashMap<>();
-        properties.put("datasource.username", username);
-        properties.put("datasource.password", password);
-        properties.put("datasource.url", jdbcUrl);
-        properties.put("datasource.driver-class-name", driverClassName);
-        properties.put("datasource.initial-size", maxConnectionSize);
-        properties.put("datasource.max-total", maxConnectionSize);
-        properties.put("datasource.max-wait-millis", 3000);
-        properties.put("datasource.slow-query-threshold", 3000);
+        properties.put("spring.datasource.username", username);
+        properties.put("spring.datasource.password", password);
+        properties.put("spring.datasource.url", jdbcUrl);
+        properties.put("spring.datasource.driver-class-name", driverClassName);
+        properties.put("spring.datasource.initial-size", maxConnectionSize);
+        properties.put("spring.datasource.max-total", maxConnectionSize);
+        properties.put("spring.datasource.max-wait-millis", 3000);
+        properties.put("spring.datasource.slow-query-threshold", 3000);
         final PropertySource propertySource = new MapPropertySource("db", properties);
         environment.getPropertySources().addLast(propertySource);
     }
