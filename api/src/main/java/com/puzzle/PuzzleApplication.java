@@ -1,13 +1,14 @@
 package com.puzzle;
 
-import org.springframework.boot.SpringApplication;
+import com.puzzle.api.config.DataSourcePropertyLoader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 public class PuzzleApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PuzzleApplication.class, args);
+        new SpringApplicationBuilder(PuzzleApplication.class).listeners(new DataSourcePropertyLoader()).run(args);
     }
 
 }

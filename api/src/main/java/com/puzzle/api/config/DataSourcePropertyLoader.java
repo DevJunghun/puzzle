@@ -1,5 +1,6 @@
 package com.puzzle.api.config;
 
+import com.puzzle.api.exception.UnknownException;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.env.PropertiesPropertySourceLoader;
 import org.springframework.boot.env.PropertySourceLoader;
@@ -32,7 +33,7 @@ public class DataSourcePropertyLoader implements ApplicationListener<Application
             final var environment = event.getEnvironment();
             buildDataSourceProperties(environment);
         } catch (Throwable ex) {
-            throw ExceptionUtils.<RuntimeException>rethrow(ex);
+            throw new UnknownException(ex.getMessage());
         }
     }
 
@@ -46,7 +47,7 @@ public class DataSourcePropertyLoader implements ApplicationListener<Application
         Objects.nonNull(jdbcUrl);
         Objects.nonNull(username);
         Objects.nonNull(password);
-        final String driverClassName = System.getenv(ENV_DB_DRIVER_CLASS) == null ? (jdbcUrl.startsWith("jdbc:mysql") ? com.mysql.cj.jdbc.Driver.class.getName() : org.mariadb.jdbc.Driver.class.getName()) : System.getenv(ENV_DB_DRIVER_CLASS);
+        final String driverClassName = System.getenv(ENV_DB_DRIVER_CLASS) == null ? (jdbcUrl.startsWith("jdbc:mysql") ? com.mysql.cj.jdbc.Driver.class.getName() : System.getenv(ENV_DB_DRIVER_CLASS)) : System.getenv(ENV_DB_DRIVER_CLASS);
         final int maxConnectionSize = System.getenv(ENV_DB_MAX_CONNECTION_SIZE) == null ? 20 : Integer.parseInt(System.getenv(ENV_DB_MAX_CONNECTION_SIZE));
         final Map<String, Object> properties = new HashMap<>();
         properties.put("datasource.username", username);

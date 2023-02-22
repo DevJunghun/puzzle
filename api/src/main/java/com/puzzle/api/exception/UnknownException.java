@@ -7,7 +7,7 @@ public class UnknownException extends ApiException {
         super(exceptionCode);
     }
 
-    UnknownException(String message) {
+    public UnknownException(String message) {
         super(exceptionCode + "  , message");
     }
 }
