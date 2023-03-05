@@ -40,4 +40,4 @@ out/
 .env
 
 ### Python ###
-**/__pycache__/**
+engine/engine/__pycache__/**
