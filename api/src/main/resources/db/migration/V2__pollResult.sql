@@ -1,5 +1,5 @@
 create table poll_results
 (
-    job     not null ENUM('STUDENT', 'EMPLOYEE', 'TEACHER'),
-    purpose not null ENUM('NO_THANKS')
+    job     ENUM('STUDENT', 'EMPLOYEE', 'TEACHER') not null,
+    purpose ENUM('NO_THANKS') not null
 );
