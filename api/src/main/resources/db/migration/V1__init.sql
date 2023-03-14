@@ -1,6 +1,7 @@
 -- drop flyway init table
 drop table flyway_schema_history if exist;
 
+-- table init
 create table users
 (
     uuid       not null varchar(36),
@@ -79,10 +80,11 @@ create table business_card_image
 create table mail_logs
 (
     uuid varchar(36),
-    user_uuid not null varchar(36),
-    mail_uuid not nul varchar (36),
-    type      not null ENUM('CONVERSATION', 'MOVEMENT', 'RESERVATION'),
-    action_at not null datetime(6),
+    user_uuid          not null varchar(36),
+    email_account_uuid not null varchar(36),
+    mail_uuid          not nul varchar (36),
+    type               not null ENUM('CONVERSATION', 'MOVEMENT', 'RESERVATION'),
+    action_at          not null datetime(6),
 
     primary key (uuid)
 );
@@ -163,7 +165,8 @@ create table receive_reminders
 (
     uuid                  not null varchar(36),
     reminder_uuid         not null varchar(36),
-    email_uuid            not null varchar(36),
+    email_account_uuid    not null varchar(36),
+    mail_uuid             not null varchar(36),
     read                  not null tinyint default 0,
     after_remind_datetime not null datetime(6),
     before_remind_datetime null datetime(6),
@@ -171,11 +174,12 @@ create table receive_reminders
     primary key (uuid)
 );
 
-create table receive_reminders
+create table send_reminders
 (
     uuid                  not null varchar(36),
     reminder_uuid         not null varchar(36),
-    email_uuid            not null varchar(36),
+    email_account_uuid    not null varchar(36),
+    mail_uuid             not null varchar(36),
     read                  not null tinyint default 0,
     after_remind_datetime not null datetime(6),
     before_remind_datetime null datetime(6),
@@ -185,10 +189,11 @@ create table receive_reminders
 
 create table highlights
 (
-    user_uuid  not null varchar(36),
-    email_uuid not null varchar(36),
-    from       not null varchar(255),
-    to         not null varchar(255),
-    created_at not null datetime(6),
-    updated_at not null datetime(6),
+    user_uuid          not null varchar(36),
+    email_account_uuid not null varchar(36),
+    mail_uuid          not null varchar(36),
+    from               not null varchar(255),
+    to                 not null varchar(255),
+    created_at         not null datetime(6),
+    updated_at         not null datetime(6),
 );
