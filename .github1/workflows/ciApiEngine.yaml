@@ -2,7 +2,7 @@ name: CIApiEngine
 
 on:
   push:
-    branches: [{branchName}]
+    branches: [main]
 
 jobs:
   build:
