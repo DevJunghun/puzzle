@@ -1,5 +1,5 @@
 -- drop flyway init table
--- drop table if exists flyway_schema_his`to`ry;
+-- drop table if exists flyway_schema_history;
 
 -- table init
 create table users
