@@ -7,6 +7,7 @@ create table users
     uuid       varchar(36)  not null,
     username         varchar(255) not null,
     password   varchar(255) not null,
+    deleted tinyint not null default 0,
     created_at datetime(6) not null,
     updated_at datetime(6) null,
 
@@ -20,6 +21,7 @@ create table user_emails
     email      varchar(255) not null,
     password   varchar(255) not null,
     type       ENUM('GMAIL', 'NAVER') not null,
+    deleted tinyint not null default 0,
     created_at datetime(6) not null,
     updated_at datetime(6) null,
 
@@ -33,6 +35,7 @@ create table address_group
     name              varchar(255) not null,
     has_parent_group  tinyint      not null default 0,
     parent_group_uuid varchar(36) null,
+    deleted tinyint not null default 0,
     created_at        datetime(6) not null,
     updated_at        datetime(6) null,
 
@@ -48,6 +51,7 @@ create table address
     phone_number      varchar(255) null,
     use_count         bigint       not null default 0,
     has_business_card tinyint      not null default 0,
+    deleted tinyint not null default 0,
     created_at        datetime(6) not null,
     updated_at        datetime(6) null,
 
@@ -60,6 +64,7 @@ create table business_cards
     address_uuid varchar(36) not null,
     content      text        not null,
     has_image    tinyint(1) not null default 0,
+    deleted tinyint not null default 0,
     created_at   datetime(6) not null,
     updated_at   datetime(6) null,
 
@@ -71,6 +76,7 @@ create table business_card_image
     uuid         varchar(36) not null,
     address_uuid varchar(36) not null,
     image        blob null,
+    deleted tinyint not null default 0,
     created_at   datetime(6) not null,
     updated_at   datetime(6) null,
 
@@ -124,6 +130,7 @@ create table template_groups
     name              varchar(255) not null,
     has_parent_group  tinyint      not null default 0,
     parent_group_uuid varchar(36) null,
+    deleted tinyint not null default 0,
     created_at        datetime(6) not null,
     updated_at        datetime(6) null,
 
@@ -138,6 +145,7 @@ create table templates
     name       varchar(255) not null,
     contents   text         not null,
     favorite   tinyint      not null default 0,
+    deleted tinyint not null default 0,
     created_at datetime(6) not null,
     updated_at datetime(6) not null,
 

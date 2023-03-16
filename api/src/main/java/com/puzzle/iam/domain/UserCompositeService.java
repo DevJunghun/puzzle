@@ -4,19 +4,20 @@ import com.puzzle.api.exception.ApiException;
 import com.puzzle.iam.controller.dto.SignInDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
-public class SignInCompositeService {
-    private final SignInService service;
+public class UserCompositeService {
+    private final UserService service;
 
-    private static String PWD_REGEX = "(\\d+\\w+)|(\\w+\\d)";
+    private static final String PWD_REGEX = "(\\d+\\w+)|(\\w+\\d)";
+
     public String signIn(final SignInDto.Request request) {
         validPwdRegex(request.getPwd());
 
         final var user = createUser(request);
-        service.create(user);
-        return "";
+        return service.create(user);
     }
 
     private void validPwdRegex(final String pwd) {
@@ -30,9 +31,11 @@ public class SignInCompositeService {
 
     private Users createUser(final SignInDto.Request request) {
         final var user = new Users();
+        final var encodedPwd = new BCryptPasswordEncoder().encode(request.getPwd());
 
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPwd());
+        user.setPassword(encodedPwd);
+        user.setDeleted(false);
 
         return user;
     }

@@ -28,6 +28,9 @@ public class Users {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 
