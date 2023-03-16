@@ -5,7 +5,7 @@
 create table users
 (
     uuid       varchar(36)  not null,
-    id         varchar(255) not null,
+    username         varchar(255) not null,
     password   varchar(255) not null,
     created_at datetime(6) not null,
     updated_at datetime(6) null,
