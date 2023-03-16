@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserController {
     private final UserCompositeService compositeService;
+
     @PutMapping("/sign-in")
-    public SignInDto.Response signIn(final @Valid @RequestBody SignInDto.Request request) {
+    public void signIn(final @Valid @RequestBody SignInDto.Create.Request request) {
         compositeService.signIn(request);
-        return null;
     }
 
+    @GetMapping("/lost-username/{email}")
+    public void lostUsername(final String email) {
+        compositeService.findUsername(email);
+    }
+
+    @GetMapping("/lost-password/{email}")
+    public void lostPassword(final String email) {
+        compositeService.findPassword(email);
+    }
 }

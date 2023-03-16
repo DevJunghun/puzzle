@@ -1,6 +1,8 @@
 package com.puzzle.iam.domain;
 
 import com.puzzle.api.exception.ApiException;
+import com.puzzle.api.util.MailSender;
+import com.puzzle.api.util.RandomPassword;
 import com.puzzle.iam.controller.dto.SignInDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,14 +12,31 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class UserCompositeService {
     private final UserService service;
+    private final MailSender mailSender;
+    private final RandomPassword randomPassword;
 
     private static final String PWD_REGEX = "(\\d+\\w+)|(\\w+\\d)";
 
-    public String signIn(final SignInDto.Request request) {
+    public SignInDto.Create.Response signIn(final SignInDto.Create.Request request) {
         validPwdRegex(request.getPwd());
 
         final var user = createUser(request);
-        return service.create(user);
+        final var userUuid = service.create(user);
+
+        return new SignInDto.Create.Response(userUuid);
+    }
+
+    public void findUsername(final String email) {
+        final var user = service.find(email);
+
+        mailSender.send(user.getUsername(), "message");
+    }
+
+    public void findPassword(final String email) {
+        final var user = service.find(email);
+        final var newPassword = randomPassword.pwd();
+
+        mailSender.send(user.getUsername(), "new password is: " + newPassword);
     }
 
     private void validPwdRegex(final String pwd) {
@@ -29,7 +48,7 @@ public class UserCompositeService {
         }
     }
 
-    private Users createUser(final SignInDto.Request request) {
+    private Users createUser(final SignInDto.Create.Request request) {
         final var user = new Users();
         final var encodedPwd = new BCryptPasswordEncoder().encode(request.getPwd());
 
