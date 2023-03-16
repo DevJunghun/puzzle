@@ -34,9 +34,17 @@ public class UserCompositeService {
 
     public void findPassword(final String email) {
         final var user = service.find(email);
-        final var newPassword = randomPassword.pwd();
+        final var newPassword = changePassword(user);
 
         mailSender.send(user.getUsername(), "new password is: " + newPassword);
+    }
+
+    private String changePassword(final Users user) {
+        final var newPassword = randomPassword.pwd();
+        user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        service.create(user);
+
+        return newPassword;
     }
 
     private void validPwdRegex(final String pwd) {

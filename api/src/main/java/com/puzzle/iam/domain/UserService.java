@@ -16,6 +16,10 @@ public class UserService {
         return user.getUuid();
     }
 
+    public void update(final Users user) {
+        repository.save(user);
+    }
+
     public Users find(final String email) {
         final var user = repository.findByEmailAndDeletedFalse(email);
 
