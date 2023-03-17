@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserCompositeService {
@@ -42,6 +44,7 @@ public class UserCompositeService {
     private String changePassword(final Users user) {
         final var newPassword = randomPassword.pwd();
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        user.setUpdatedAt(LocalDateTime.now());
         service.create(user);
 
         return newPassword;
@@ -49,7 +52,7 @@ public class UserCompositeService {
 
     private void validPwdRegex(final String pwd) {
         if (pwd.matches(PWD_REGEX)) {
-            return;
+            //do nothing
 
         } else {
             throw new ApiException("regex");
@@ -66,5 +69,4 @@ public class UserCompositeService {
 
         return user;
     }
-
 }
