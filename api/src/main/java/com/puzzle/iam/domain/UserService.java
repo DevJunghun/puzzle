@@ -1,5 +1,6 @@
 package com.puzzle.iam.domain;
 
+import com.puzzle.api.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +17,28 @@ public class UserService {
         return user.getUuid();
     }
 
-    public void update(final Users user) {
+    public Users findByEmailNotNull(final String email) {
+        final var user = repository.findByEmailAndDeletedFalse(email);
+        validUserNotNull(user);
+
+        return user;
+    }
+
+    public Users findByUuidNotNull(final String uuid) {
+        final var user = repository.findByEmailAndDeletedFalse(uuid);
+        validUserNotNull(user);
+
+        return user;
+    }
+
+    public void save(final Users user) {
         repository.save(user);
     }
 
-    public Users find(final String email) {
-        final var user = repository.findByEmailAndDeletedFalse(email);
-
-        return user;
+    private void validUserNotNull(final Users user) {
+        if (user == null) {
+            throw new ApiException("User Not Found");
+        }
     }
 
     private void auditNewUser(final Users user) {

@@ -29,16 +29,25 @@ public class UserCompositeService {
     }
 
     public void findUsername(final String email) {
-        final var user = service.find(email);
+        final var user = service.findByEmailNotNull(email);
 
         mailSender.send(user.getUsername(), "message");
     }
 
     public void findPassword(final String email) {
-        final var user = service.find(email);
+        final var user = service.findByEmailNotNull(email);
         final var newPassword = changePassword(user);
 
         mailSender.send(user.getUsername(), "new password is: " + newPassword);
+    }
+
+    public void delete(final String uuid) {
+        final var user = service.findByUuidNotNull(uuid);
+
+        user.setDeleted(true);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        service.save(user);
     }
 
     private String changePassword(final Users user) {

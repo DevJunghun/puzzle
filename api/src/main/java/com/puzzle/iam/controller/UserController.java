@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,5 +34,10 @@ public class UserController {
     @GetMapping("/lost-password/{email}")
     public void lostPassword(final @PathVariable String email) {
         compositeService.findPassword(email);
+    }
+
+    @DeleteMapping("/delete/{uuid}")
+    public void delete(final @PathVariable String uuid) {
+        compositeService.delete(uuid);
     }
 }
