@@ -56,6 +56,24 @@ task createTestDbScript(type: Exec) {
     }
 }
 
+task dbUp(type: Exec) {
+    group "test"
+    workingDir "${projectDir}"
+    commandLine "docker", "compose", "-f", "./docker/docker-compose-db.yml", "-p", "db", "up", "-d"
+    doLast {
+        println "Test Db Up!"
+    }
+}
+
+task dbDown(type: Exec) {
+    group "test"
+    workingDir "${projectDir}"
+    commandLine "docker", "compose", "-f", "./docker/docker-compose-db.yml", "-p", "db", "down"
+    doLast {
+        println "Test Db Down!"
+    }
+}
+
 task testDbUp(type: Exec) {
     group "test"
     workingDir "${projectDir}"

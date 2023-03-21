@@ -1,5 +1,5 @@
 cd api
-./gradlew clean build
+./gradlew dbUp
 cd build/libs
 export DB_CATALOG=puzzle&&export DB_HOST=localhost&&export DB_PASSWORD=1234&&export DB_PORT=13307&&export DB_USERNAME=root&& java -jar puzzle-0.0.1-SNAPSHOT.jar
 unset DB_CATALOG&&unset DB_HOST&&unset DB_PASSWORD&&unset DB_PORT&&unset DB_USERNAME
