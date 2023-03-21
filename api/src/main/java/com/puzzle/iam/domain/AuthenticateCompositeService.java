@@ -19,18 +19,9 @@ public class AuthenticateCompositeService {
     private final BCryptPasswordEncoder encoder;
 
     public AuthenticateDto.LogIn.Response authenticate(final AuthenticateDto.LogIn.Request request, final String ip) {
-        final var user = userCompositeService.findByUsername(request.getUsername(), BooleanDelete.FALSE, BooleanValidate.FALSE);
-        if (user == null) {
-            throw new UserNotExistException(request.getUsername());
-        }
+        final var user = findUserAndValidate(request, ip);
 
-        authLogCompositeService.create(null, AuthType.LOGIN, false, ip, ExceptionCode.User.USER_NOT_EXIST_EXCEPTION);
-
-        if (!encoder.matches(user.getPassword(), request.getPassword())) {
-            authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.INVALID_CREDENTIAL_EXCEPTION);
-            //todo: if wrong many times?
-            throw new InvalidCredentialException();
-        }
+        validPassword(user, request, ip);
 
         authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, true, ip, null);
         return new AuthenticateDto.LogIn.Response("token");
@@ -42,5 +33,24 @@ public class AuthenticateCompositeService {
         final var user = userCompositeService.findByUuid(userUuid);
 
         authLogCompositeService.create(user.getUuid(), AuthType.LOGOUT, true, ip, null);
+    }
+
+    private User findUserAndValidate(final AuthenticateDto.LogIn.Request request, final String ip) {
+        final var user = userCompositeService.findByUsername(request.getUsername(), BooleanDelete.FALSE, BooleanValidate.FALSE);
+
+        if (user == null) {
+            authLogCompositeService.create(null, AuthType.LOGIN, false, ip, ExceptionCode.User.USER_NOT_EXIST_EXCEPTION);
+            throw new UserNotExistException(request.getUsername());
+        }
+
+        return user;
+    }
+
+    private void validPassword(final User user, final AuthenticateDto.LogIn.Request request, final String ip) {
+        if (!encoder.matches(user.getPassword(), request.getPassword())) {
+            authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.INVALID_CREDENTIAL_EXCEPTION);
+            //todo: if wrong many times?
+            throw new InvalidCredentialException();
+        }
     }
 }
