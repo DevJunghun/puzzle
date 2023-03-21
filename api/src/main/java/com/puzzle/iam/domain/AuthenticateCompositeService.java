@@ -21,7 +21,7 @@ public class AuthenticateCompositeService {
     public AuthenticateDto.LogIn.Response authenticate(final AuthenticateDto.LogIn.Request request, final String ip) {
         final var user = findUserAndValidate(request, ip);
 
-        validPassword(user, request, ip);
+        validCredential(user, request, ip);
 
         authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, true, ip, null);
         return new AuthenticateDto.LogIn.Response("token");
@@ -46,7 +46,7 @@ public class AuthenticateCompositeService {
         return user;
     }
 
-    private void validPassword(final User user, final AuthenticateDto.LogIn.Request request, final String ip) {
+    private void validCredential(final User user, final AuthenticateDto.LogIn.Request request, final String ip) {
         if (!encoder.matches(user.getPassword(), request.getPassword())) {
             authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.INVALID_CREDENTIAL_EXCEPTION);
             //todo: if wrong many times?
