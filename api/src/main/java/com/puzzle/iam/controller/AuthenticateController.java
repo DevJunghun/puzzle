@@ -2,6 +2,7 @@ package com.puzzle.iam.controller;
 
 import com.puzzle.iam.controller.dto.AuthenticateDto;
 import com.puzzle.iam.domain.AuthenticateCompositeService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -21,12 +22,16 @@ import static com.puzzle.api.session.UserTokenHeader.HEADER_KEY;
 public class AuthenticateController {
     private final AuthenticateCompositeService compositeService;
     @PostMapping("/auth")
-    public AuthenticateDto.LogIn.Response authenticate(@RequestBody AuthenticateDto.LogIn.Request request) {
-        return compositeService.authenticate(request);
+    public AuthenticateDto.LogIn.Response authenticate(@RequestBody AuthenticateDto.LogIn.Request request, final HttpServletRequest httpServletRequest) {
+        final var ip = httpServletRequest.getRemoteAddr();
+
+        return compositeService.authenticate(request, ip);
     }
 
     @GetMapping("/logout")
-    public void logout(@RequestHeader(HEADER_KEY) String userToken) {
-        compositeService.logOut(userToken);
+    public void logout(@RequestHeader(HEADER_KEY) String userToken, final HttpServletRequest httpServletRequest) {
+        final var ip = httpServletRequest.getRemoteAddr();
+
+        compositeService.logOut(userToken, ip);
     }
 }
