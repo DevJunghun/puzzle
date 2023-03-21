@@ -24,5 +24,5 @@ public class UserSetting {
     @Column(name = "user_uuid", nullable = false)
     private String userUuid;
 
-    
+
 }

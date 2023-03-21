@@ -42,6 +42,10 @@ public class UserCompositeService {
         mailSender.send(user.getUsername(), "new password is: " + newPassword);
     }
 
+    public User findByUsername(final String username, final BooleanDelete delete, final BooleanValidate validate) {
+        return service.findByUsername(username, delete, validate);
+    }
+
     public void delete(final String uuid) {
         final var user = service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
 
@@ -49,6 +53,10 @@ public class UserCompositeService {
         user.setUpdatedAt(LocalDateTime.now());
 
         service.save(user);
+    }
+
+    public User findByUuid(final String uuid) {
+        return service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
     }
 
     private String changePassword(final User user) {

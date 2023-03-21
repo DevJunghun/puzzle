@@ -50,6 +50,20 @@ public class UserService {
         return user;
     }
 
+    public User findByUsername(final String username, final BooleanDelete delete, final BooleanValidate validate) {
+        User user;
+
+        if(delete.isTrue()) {
+            user = repository.findByUsernameAndDeletedFalse(username);
+        } else{
+            user = repository.findByUsername(username);
+        }
+
+        validUserNotNull(user, validate, username);
+
+        return user;
+    }
+
     public void save(final User user) {
         repository.save(user);
     }

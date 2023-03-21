@@ -1,6 +1,7 @@
 package com.puzzle.iam.controller;
 
 import com.puzzle.iam.controller.dto.AuthenticateDto;
+import com.puzzle.iam.domain.AuthenticateCompositeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -18,22 +19,14 @@ import static com.puzzle.api.session.UserTokenHeader.HEADER_KEY;
 @RequestMapping(value = "/authenticate", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 public class AuthenticateController {
-    @PostMapping("/kakao")
-    public AuthenticateDto.Response authenticate(@RequestBody AuthenticateDto.Kakao request) {
-        return new AuthenticateDto.Response("username", "token");
-    }
-
-    @PostMapping("/google")
-    public AuthenticateDto.Response authenticate(@RequestBody AuthenticateDto.Google request) {
-        return new AuthenticateDto.Response("username", "token");
-    }
-
-    @PostMapping("/naver")
-    public AuthenticateDto.Response authenticate(@RequestBody AuthenticateDto.Naver request) {
-        return new AuthenticateDto.Response("username", "token");
+    private final AuthenticateCompositeService compositeService;
+    @PostMapping("/auth")
+    public AuthenticateDto.LogIn.Response authenticate(@RequestBody AuthenticateDto.LogIn.Request request) {
+        return compositeService.authenticate(request);
     }
 
     @GetMapping("/logout")
     public void logout(@RequestHeader(HEADER_KEY) String userToken) {
+        compositeService.logOut(userToken);
     }
 }
