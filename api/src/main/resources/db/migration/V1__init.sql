@@ -28,7 +28,7 @@ create table user_emails
     primary key (uuid)
 );
 
-create table address_group
+create table address_groups
 (
     uuid              varchar(36)  not null,
     user_uuid         varchar(36)  not null,
@@ -71,7 +71,7 @@ create table business_cards
     primary key (uuid)
 );
 
-create table business_card_image
+create table business_card_images
 (
     uuid         varchar(36) not null,
     address_uuid varchar(36) not null,
