@@ -61,7 +61,7 @@ task dbUp(type: Exec) {
     workingDir "${projectDir}"
     commandLine "docker", "compose", "-f", "./docker/docker-compose-db.yml", "-p", "db", "up", "-d"
     doLast {
-        println "Test Db Up!"
+        println "Db Up!"
     }
 }
 
@@ -70,7 +70,7 @@ task dbDown(type: Exec) {
     workingDir "${projectDir}"
     commandLine "docker", "compose", "-f", "./docker/docker-compose-db.yml", "-p", "db", "down"
     doLast {
-        println "Test Db Down!"
+        println "Db Down!"
     }
 }
 
