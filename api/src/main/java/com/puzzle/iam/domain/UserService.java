@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 public class UserService {
     private final UserRepository repository;
 
-    public String create(final Users user) {
+    public String create(final User user) {
         auditNewUser(user);
         repository.save(user);
 
         return user.getUuid();
     }
 
-    public Users findByEmail(final String email, final BooleanDelete delete, final BooleanValidate validate) {
-        Users user;
+    public User findByEmail(final String email, final BooleanDelete delete, final BooleanValidate validate) {
+        User user;
 
         if (delete.isTrue()) {
             user = repository.findByEmailAndDeletedFalse(email);
@@ -35,8 +35,8 @@ public class UserService {
         return user;
     }
 
-    public Users findByUuid(final String uuid, final BooleanDelete delete, final BooleanValidate validate) {
-        Users user;
+    public User findByUuid(final String uuid, final BooleanDelete delete, final BooleanValidate validate) {
+        User user;
 
         if (delete.isTrue()) {
             user = repository.findByUuidAndDeletedFalse(uuid);
@@ -50,17 +50,17 @@ public class UserService {
         return user;
     }
 
-    public void save(final Users user) {
+    public void save(final User user) {
         repository.save(user);
     }
 
-    private void validUserNotNull(final Users user, BooleanValidate validate, String var) {
+    private void validUserNotNull(final User user, BooleanValidate validate, String var) {
         if (validate.isTrue() && user == null) {
             throw new UserNotFoundException(var);
         }
     }
 
-    private void auditNewUser(final Users user) {
+    private void auditNewUser(final User user) {
         final var now = LocalDateTime.now();
 
         user.setCreatedAt(now);

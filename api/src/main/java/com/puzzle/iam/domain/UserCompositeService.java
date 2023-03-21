@@ -51,7 +51,7 @@ public class UserCompositeService {
         service.save(user);
     }
 
-    private String changePassword(final Users user) {
+    private String changePassword(final User user) {
         final var newPassword = randomPassword.pwd();
 
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
@@ -71,14 +71,14 @@ public class UserCompositeService {
     }
 
     private String createUser(final SignInDto.Create.Request request) {
-        final var user = new Users();
+        final var user = new User();
 
         assignUserData(user, request);
 
         return service.create(user);
     }
 
-    private void assignUserData(final Users user, final SignInDto.Create.Request request) {
+    private void assignUserData(final User user, final SignInDto.Create.Request request) {
         final var encodedPwd = new BCryptPasswordEncoder().encode(request.getPwd());
 
         user.setUsername(request.getUsername());

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @Setter
-public class Users {
+public class User {
     @Id
     @Column(name = "uuid", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
