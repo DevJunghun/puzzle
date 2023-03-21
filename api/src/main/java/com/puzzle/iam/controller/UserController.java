@@ -22,8 +22,8 @@ public class UserController {
     private final UserCompositeService compositeService;
 
     @PutMapping("/sign-in")
-    public void signIn(final @Valid @RequestBody SignInDto.Create.Request request) {
-        compositeService.signIn(request);
+    public SignInDto.Create.Response signIn(final @Valid @RequestBody SignInDto.Create.Request request) {
+        return compositeService.signIn(request);
     }
 
     @GetMapping("/lost-username/{email}")

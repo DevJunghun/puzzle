@@ -1,6 +1,8 @@
 package com.puzzle.iam.domain;
 
-import com.puzzle.api.exception.ApiException;
+import com.puzzle.api.util.BooleanDelete;
+import com.puzzle.api.util.BooleanValidate;
+import com.puzzle.iam.domain.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
+
     public String create(final Users user) {
         auditNewUser(user);
         repository.save(user);
@@ -17,16 +20,32 @@ public class UserService {
         return user.getUuid();
     }
 
-    public Users findByEmailNotNull(final String email) {
-        final var user = repository.findByEmailAndDeletedFalse(email);
-        validUserNotNull(user);
+    public Users findByEmail(final String email, final BooleanDelete delete, final BooleanValidate validate) {
+        Users user;
+
+        if (delete.isTrue()) {
+            user = repository.findByEmailAndDeletedFalse(email);
+
+        } else {
+            user = repository.findByEmail(email);
+        }
+
+        validUserNotNull(user, validate, email);
 
         return user;
     }
 
-    public Users findByUuidNotNull(final String uuid) {
-        final var user = repository.findByEmailAndDeletedFalse(uuid);
-        validUserNotNull(user);
+    public Users findByUuid(final String uuid, final BooleanDelete delete, final BooleanValidate validate) {
+        Users user;
+
+        if (delete.isTrue()) {
+            user = repository.findByUuidAndDeletedFalse(uuid);
+
+        } else {
+            user = repository.findByUuid(uuid);
+        }
+
+        validUserNotNull(user, validate, uuid);
 
         return user;
     }
@@ -35,9 +54,9 @@ public class UserService {
         repository.save(user);
     }
 
-    private void validUserNotNull(final Users user) {
-        if (user == null) {
-            throw new ApiException("User Not Found");
+    private void validUserNotNull(final Users user, BooleanValidate validate, String var) {
+        if (validate.isTrue() && user == null) {
+            throw new UserNotFoundException(var);
         }
     }
 
