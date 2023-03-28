@@ -27,7 +27,7 @@ import java.util.List;
                 value = {"classpath:/db/drop_tables.sql", "classpath:/db/app_migration.sql"},
                 executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 })
-@SpringBootTest(properties = "spring.config.location=classpath:/application.yaml")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "spring.config.location=classpath:/application.yaml")
 @ContextConfiguration(classes = PuzzleApplication.class)
 @AutoConfigureMockMvc
 public class BaseTest {

@@ -8,7 +8,7 @@ import lombok.Getter;
 public class SignInDto {
     public static class Create {
         @Getter
-        public class Request {
+        public static class Request {
             @NotEmpty
             @Size(max = 20)
             private String id;
@@ -18,9 +18,14 @@ public class SignInDto {
             @NotEmpty
             @Size(max = 20)
             private String username;
+
+            @NotEmpty
+            @Size(max = 50)
+            private String email;
         }
 
         @AllArgsConstructor
+        @Getter
         public static class Response {
             private String uuid;
         }

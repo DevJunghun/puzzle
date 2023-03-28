@@ -41,6 +41,9 @@ dependencies {
     implementation 'org.springframework:spring-context-support:6.0.6'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 }
 
 tasks.named('test') {

@@ -3,6 +3,7 @@ package com.puzzle.iam.controller;
 import com.puzzle.iam.controller.dto.SignInDto;
 import com.puzzle.iam.domain.UserCompositeService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserCompositeService compositeService;
 
-    @PutMapping("/sign-in")
+    @PutMapping(value = "/sign-in")
     public SignInDto.Create.Response signIn(final @Valid @RequestBody SignInDto.Create.Request request) {
         return compositeService.signIn(request);
     }

@@ -19,8 +19,11 @@ import java.util.UUID;
 @Setter
 public class AuthLog {
     @Id
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "uuid", nullable = false)
     private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "user_uuid", nullable = true)

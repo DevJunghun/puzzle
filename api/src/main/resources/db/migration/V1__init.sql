@@ -4,6 +4,7 @@
 -- table init
 create table if not exists users
 (
+    id bigint not null auto_increment,
     uuid       varchar(36)  not null,
     username         varchar(255) not null,
     password   varchar(255) not null,
@@ -11,11 +12,12 @@ create table if not exists users
     created_at datetime(6) not null,
     updated_at datetime(6) null,
 
-    Primary Key (uuid)
+    Primary Key (id)
 );
 
 create table if not exists user_emails
 (
+    id bigint not null auto_increment,
     uuid       varchar(36)  not null,
     user_uuid  varchar(36)  not null,
     email      varchar(255) not null,
@@ -25,11 +27,12 @@ create table if not exists user_emails
     created_at datetime(6) not null,
     updated_at datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists address_groups
 (
+    id bigint not null auto_increment,
     uuid              varchar(36)  not null,
     user_uuid         varchar(36)  not null,
     name              varchar(255) not null,
@@ -39,11 +42,12 @@ create table if not exists address_groups
     created_at        datetime(6) not null,
     updated_at        datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists address
 (
+    id bigint not null auto_increment,
     uuid              varchar(36)  not null,
     name              varchar(255) not null,
     group_uuid        varchar(36)  not null,
@@ -55,11 +59,12 @@ create table if not exists address
     created_at        datetime(6) not null,
     updated_at        datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists business_cards
 (
+    id bigint not null auto_increment,
     uuid         varchar(36) not null,
     address_uuid varchar(36) not null,
     content      text        not null,
@@ -68,11 +73,12 @@ create table if not exists business_cards
     created_at   datetime(6) not null,
     updated_at   datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists business_card_images
 (
+    id bigint not null auto_increment,
     uuid         varchar(36) not null,
     address_uuid varchar(36) not null,
     image        blob null,
@@ -80,11 +86,12 @@ create table if not exists business_card_images
     created_at   datetime(6) not null,
     updated_at   datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists mail_logs
 (
+    id bigint not null auto_increment,
     uuid               varchar(36) not null,
     user_uuid          varchar(36) not null,
     email_account_uuid varchar(36) not null,
@@ -92,7 +99,7 @@ create table if not exists mail_logs
     type               ENUM('CONVERSATION', 'MOVEMENT', 'RESERVATION') not null,
     action_at          datetime(6) not null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists mail_conversation_logs
@@ -125,6 +132,7 @@ create table if not exists mail_movement_logs
 
 create table if not exists template_groups
 (
+    id bigint not null auto_increment,
     uuid              varchar(36)  not null,
     user_uuid         varchar(36)  not null,
     name              varchar(255) not null,
@@ -134,11 +142,12 @@ create table if not exists template_groups
     created_at        datetime(6) not null,
     updated_at        datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists templates
 (
+    id bigint not null auto_increment,
     uuid       varchar(36)  not null,
     user_uuid  varchar(36)  not null,
     group_uuid varchar(36)  not null,
@@ -149,28 +158,33 @@ create table if not exists templates
     created_at datetime(6) not null,
     updated_at datetime(6) not null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists auth_logs
 (
+    id bigint not null auto_increment,
     user_uuid     varchar(36) not null,
     type          ENUM('LOGIN', 'LOGOUT') not null,
     success       tinyint     not null default 1,
-    error_message text null
+    error_message text null,
+
+    primary key (id)
 );
 
 create table if not exists reminders
 (
+    id bigint not null auto_increment,
     uuid      varchar(36) not null,
     user_uuid varchar(36) not null,
     type      ENUM('RECEIVE', 'SEND') not null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists receive_reminders
 (
+    id bigint not null auto_increment,
     uuid                   varchar(36) not null,
     reminder_uuid          varchar(36) not null,
     email_account_uuid     varchar(36) not null,
@@ -179,11 +193,12 @@ create table if not exists receive_reminders
     after_remind_datetime  datetime(6) not null,
     before_remind_datetime datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists send_reminders
 (
+    id bigint not null auto_increment,
     uuid                   varchar(36) not null,
     reminder_uuid          varchar(36) not null,
     email_account_uuid     varchar(36) not null,
@@ -192,7 +207,7 @@ create table if not exists send_reminders
     after_remind_datetime  datetime(6) not null,
     before_remind_datetime datetime(6) null,
 
-    primary key (uuid)
+    primary key (id)
 );
 
 create table if not exists highlights

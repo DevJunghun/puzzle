@@ -91,6 +91,7 @@ public class UserCompositeService {
 
         user.setUsername(request.getUsername());
         user.setPassword(encodedPwd);
+        user.setEmail(request.getEmail());
         user.setDeleted(false);
     }
 }
