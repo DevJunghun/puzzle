@@ -7,6 +7,10 @@ import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,9 +23,11 @@ import java.util.Collection;
 import java.util.List;
 
 @SqlGroup({
-        @Sql(config = @SqlConfig(dataSource = "dataSource"), value = {"classpath:/db/drop_tables.sql", "classpath:/db/app.sql"})
+        @Sql(config = @SqlConfig(dataSource = "dataSource"),
+                value = {"classpath:/db/drop_tables.sql", "classpath:/db/app_migration.sql"},
+                executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 })
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "spring.config.location=" + "classpath:/application.yaml")
+@SpringBootTest(properties = "spring.config.location=classpath:/application.yaml")
 @ContextConfiguration(classes = PuzzleApplication.class)
 @AutoConfigureMockMvc
 public class BaseTest {

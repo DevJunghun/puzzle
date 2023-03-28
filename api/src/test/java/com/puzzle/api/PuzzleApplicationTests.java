@@ -1,13 +1,38 @@
 package com.puzzle.api;
 
+import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.TestFactory;
 
-@SpringBootTest
-class PuzzleApplicationTests {
+class PuzzleApplicationTests extends BaseTest{
 
-    @Test
-    void contextLoads() {
+    @TestFactory
+    DynamicNode a() {
+        return single("test", () -> {});
     }
+//    @TestFactory
+//    DynamicNode contextLoads() {
+//        return single("test", () -> {});
+//    }
+//
+//    @TestFactory
+//    DynamicNode contextLoads1() {
+//        return single("test", () -> {});
+//    }
+//
+//    @TestFactory
+//    DynamicNode contextLoads2() {
+//        return single("test", () -> {});
+//    }
+//
+//    @TestFactory
+//    DynamicNode contextLoads3() {
+//        return single("test", () -> {});
+//    }
+//
+//    @TestFactory
+//    DynamicNode contextLoads4() {
+//        return single("test", () -> {});
+//    }
 
 }

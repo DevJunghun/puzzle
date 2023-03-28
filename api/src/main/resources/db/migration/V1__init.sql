@@ -2,7 +2,7 @@
 -- drop table if exists flyway_schema_history;
 
 -- table init
-create table users
+create table if not exists users
 (
     uuid       varchar(36)  not null,
     username         varchar(255) not null,
@@ -14,7 +14,7 @@ create table users
     Primary Key (uuid)
 );
 
-create table user_emails
+create table if not exists user_emails
 (
     uuid       varchar(36)  not null,
     user_uuid  varchar(36)  not null,
@@ -28,7 +28,7 @@ create table user_emails
     primary key (uuid)
 );
 
-create table address_groups
+create table if not exists address_groups
 (
     uuid              varchar(36)  not null,
     user_uuid         varchar(36)  not null,
@@ -42,7 +42,7 @@ create table address_groups
     primary key (uuid)
 );
 
-create table address
+create table if not exists address
 (
     uuid              varchar(36)  not null,
     name              varchar(255) not null,
@@ -58,7 +58,7 @@ create table address
     primary key (uuid)
 );
 
-create table business_cards
+create table if not exists business_cards
 (
     uuid         varchar(36) not null,
     address_uuid varchar(36) not null,
@@ -71,7 +71,7 @@ create table business_cards
     primary key (uuid)
 );
 
-create table business_card_images
+create table if not exists business_card_images
 (
     uuid         varchar(36) not null,
     address_uuid varchar(36) not null,
@@ -83,7 +83,7 @@ create table business_card_images
     primary key (uuid)
 );
 
-create table mail_logs
+create table if not exists mail_logs
 (
     uuid               varchar(36) not null,
     user_uuid          varchar(36) not null,
@@ -95,7 +95,7 @@ create table mail_logs
     primary key (uuid)
 );
 
-create table mail_conversation_logs
+create table if not exists mail_conversation_logs
 (
     mail_log_uuid varchar(36) not null,
     with_address  tinyint     not null default 0,
@@ -105,7 +105,7 @@ create table mail_conversation_logs
     action_at     datetime(6) not null
 );
 
-create table mail_reservation_logs
+create table if not exists mail_reservation_logs
 (
     mail_log_uuid varchar(36) not null,
     with_address  tinyint     not null default 0,
@@ -115,7 +115,7 @@ create table mail_reservation_logs
     action_at     datetime(6) not null
 );
 
-create table mail_movement_logs
+create table if not exists mail_movement_logs
 (
     mail_log_uuid varchar(36) not null,
     `from`        ENUM('IMPORTANT', 'NORMAL', 'TRASH') not null,
@@ -123,7 +123,7 @@ create table mail_movement_logs
     action_at     datetime(6) not null
 );
 
-create table template_groups
+create table if not exists template_groups
 (
     uuid              varchar(36)  not null,
     user_uuid         varchar(36)  not null,
@@ -137,7 +137,7 @@ create table template_groups
     primary key (uuid)
 );
 
-create table templates
+create table if not exists templates
 (
     uuid       varchar(36)  not null,
     user_uuid  varchar(36)  not null,
@@ -152,7 +152,7 @@ create table templates
     primary key (uuid)
 );
 
-create table auth_logs
+create table if not exists auth_logs
 (
     user_uuid     varchar(36) not null,
     type          ENUM('LOGIN', 'LOGOUT') not null,
@@ -160,7 +160,7 @@ create table auth_logs
     error_message text null
 );
 
-create table reminders
+create table if not exists reminders
 (
     uuid      varchar(36) not null,
     user_uuid varchar(36) not null,
@@ -169,7 +169,7 @@ create table reminders
     primary key (uuid)
 );
 
-create table receive_reminders
+create table if not exists receive_reminders
 (
     uuid                   varchar(36) not null,
     reminder_uuid          varchar(36) not null,
@@ -182,7 +182,7 @@ create table receive_reminders
     primary key (uuid)
 );
 
-create table send_reminders
+create table if not exists send_reminders
 (
     uuid                   varchar(36) not null,
     reminder_uuid          varchar(36) not null,
@@ -195,7 +195,7 @@ create table send_reminders
     primary key (uuid)
 );
 
-create table highlights
+create table if not exists highlights
 (
     user_uuid          varchar(36)  not null,
     email_account_uuid varchar(36)  not null,

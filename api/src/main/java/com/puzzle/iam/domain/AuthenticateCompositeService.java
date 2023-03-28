@@ -8,6 +8,7 @@ import com.puzzle.iam.domain.exceptions.InvalidCredentialException;
 import com.puzzle.iam.domain.exceptions.UserNotExistException;
 import com.puzzle.iam.type.AuthType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
