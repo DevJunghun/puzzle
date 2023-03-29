@@ -23,7 +23,7 @@ public class UserCompositeService {
     private final RandomPassword randomPassword;
     private final UserEmailCompositeService userEmailCompositeService;
 
-    private static final String PWD_REGEX = "(\\d+\\w+)|(\\w+\\d)";
+    private static final String PWD_REGEX = "(\\d+[A-z]+)|([A-z]+\\d+)";
 
     @Transactional
     public SignInDto.Create.Response signIn(final SignInDto.Create.Request request) {
