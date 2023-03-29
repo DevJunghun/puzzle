@@ -4,8 +4,11 @@ import com.puzzle.api.util.BooleanDelete;
 import com.puzzle.api.util.BooleanValidate;
 import com.puzzle.api.util.MailSender;
 import com.puzzle.api.util.RandomPassword;
+import com.puzzle.email.domain.UserEmailCompositeService;
 import com.puzzle.iam.controller.dto.SignInDto;
+import com.puzzle.iam.domain.exceptions.AlreadyExistUserException;
 import com.puzzle.iam.domain.exceptions.NotValidPasswordException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,23 +21,27 @@ public class UserCompositeService {
     private final UserService service;
     private final MailSender mailSender;
     private final RandomPassword randomPassword;
+    private final UserEmailCompositeService userEmailCompositeService;
 
     private static final String PWD_REGEX = "(\\d+\\w+)|(\\w+\\d)";
 
+    @Transactional
     public SignInDto.Create.Response signIn(final SignInDto.Create.Request request) {
-        validPwdRegex(request.getPwd());
+        validWhenCreate(request);
 
         final var userUuid = createUser(request);
 
         return new SignInDto.Create.Response(userUuid);
     }
 
+    @Transactional
     public void findUsername(final String email) {
         final var user = service.findByEmail(email,BooleanDelete.FALSE, BooleanValidate.TRUE);
 
         mailSender.send(user.getUsername(), "message");
     }
 
+    @Transactional
     public void findPassword(final String email) {
         final var user = service.findByEmail(email, BooleanDelete.FALSE, BooleanValidate.TRUE);
         final var newPassword = changePassword(user);
@@ -42,10 +49,12 @@ public class UserCompositeService {
         mailSender.send(user.getUsername(), "new password is: " + newPassword);
     }
 
+    @Transactional
     public User findByUsername(final String username, final BooleanDelete delete, final BooleanValidate validate) {
         return service.findByUsername(username, delete, validate);
     }
 
+    @Transactional
     public void delete(final String uuid) {
         final var user = service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
 
@@ -55,6 +64,7 @@ public class UserCompositeService {
         service.save(user);
     }
 
+    @Transactional
     public User findByUuid(final String uuid) {
         return service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
     }
@@ -75,6 +85,31 @@ public class UserCompositeService {
 
         } else {
             throw new NotValidPasswordException();
+        }
+    }
+
+    private void validWhenCreate(final SignInDto.Create.Request request) {
+        validExistUser(request.getUsername());
+        validPwdRegex(request.getPwd());
+        checkDuplicateMainEmail(request.getEmail());
+    }
+    private void validEmailIfExist(final String email) {
+        userEmailCompositeService.findEmailExists(email);
+    }
+
+    private void checkDuplicateMainEmail(final String email) {
+        final var user = service.findByEmail(email, BooleanDelete.FALSE, BooleanValidate.FALSE);
+
+        if (user != null) {
+            throw new AlreadyExistUserException(email);
+        }
+    }
+
+    private void validExistUser(final String username) {
+        final var user = service.findByUsername(username, BooleanDelete.FALSE, BooleanValidate.FALSE);
+
+        if (user != null) {
+            throw new AlreadyExistUserException(username);
         }
     }
 

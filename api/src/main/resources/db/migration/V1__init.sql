@@ -21,7 +21,7 @@ create table if not exists user_emails
     uuid       varchar(36)  not null,
     user_uuid  varchar(36)  not null,
     email      varchar(255) not null,
-    password   varchar(255) not null,
+    password   varchar(255) null,
     type       ENUM('GMAIL', 'NAVER') not null,
     deleted tinyint not null default 0,
     created_at datetime(6) not null,

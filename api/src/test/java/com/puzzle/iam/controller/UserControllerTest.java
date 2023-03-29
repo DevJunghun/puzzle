@@ -2,6 +2,7 @@ package com.puzzle.iam.controller;
 
 import com.puzzle.RestClientFactory;
 import com.puzzle.api.BaseTest;
+import com.puzzle.iam.domain.exceptions.AlreadyExistUserException;
 import jdk.jfr.Description;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DynamicNode;
@@ -22,9 +23,8 @@ class UserControllerTest extends BaseTest {
 
                     final var createRequest = new JSONObject();
 
-                    createRequest.put("id", "dgoh1620");
-                    createRequest.put("pwd", "password12");
                     createRequest.put("username", "roganOh");
+                    createRequest.put("pwd", "password12");
                     createRequest.put("email", "fdscbjdcnhd@gmail.com");
 
                     final var actual = RestClientFactory.put(createUserUri, createRequest);
@@ -36,26 +36,22 @@ class UserControllerTest extends BaseTest {
 
                     final var createRequest = new JSONObject();
 
-                    createRequest.put("id", "dgoh1620");
-                    createRequest.put("pwd", "password12");
                     createRequest.put("username", "roganOh");
+                    createRequest.put("pwd", "password12");
                     createRequest.put("email", "fdscbjdcnhd2@gmail.com");
 
-                    final var actual = RestClientFactory.put(createUserUri, createRequest);
-
-                    org.assertj.core.api.Assertions.assertThat(actual.get("uuid")).isNotNull().isNotEqualTo("");
+                    RestClientFactory.putAssertFail(createUserUri, createRequest, AlreadyExistUserException.class);
                 }),
 
-                single("이미 존재하는 유저 이메일로 유저를 생성하면 에러.", () -> {
+                single("이미 존재하는 메인 이메일로 유저를 생성하면 에러.", () -> {
 
                     final var createRequest = new JSONObject();
 
-                    createRequest.put("id", "dgoh1621");
+                    createRequest.put("username", "roganOh2");
                     createRequest.put("pwd", "password12");
-                    createRequest.put("username", "roganOh");
-                    createRequest.put("email", "fdscbjdcnhd@gmail.com@gmail.com");
+                    createRequest.put("email", "fdscbjdcnhd@gmail.com");
 
-                    final var actual = RestClientFactory.put(createUserUri, createRequest);
+                    RestClientFactory.putAssertFail(createUserUri, createRequest, AlreadyExistUserException.class);
                 })
         );
     }
