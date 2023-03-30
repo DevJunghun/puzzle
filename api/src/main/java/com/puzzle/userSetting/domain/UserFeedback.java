@@ -1,4 +1,4 @@
-package com.puzzle.userSetting;
+package com.puzzle.userSetting.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,20 +9,19 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
-@Table(name = "user_settings")
+@Table(name = "user_feedbacks")
 @Getter
 @Setter
-public class UserSetting {
+public class UserFeedback {
     @Id
-    @Column(name = "uuid", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uuid = UUID.randomUUID().toString();
+    private Long id;
 
     @Column(name = "user_uuid", nullable = false)
     private String userUuid;
 
-
+    @Column(name = "feedback", nullable = false)
+    private String feedback;
 }
