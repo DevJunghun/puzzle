@@ -19,4 +19,17 @@ public class ExceptionCode {
         final public static String USER_EMAIL_ALREADY_EXIST_EXCEPTION = "User Email Already Exist";
         final public static String USER_EMAIL_NOT_FOUND_EXCEPTION = "User Email Not Found";
     }
+
+    public static class AddressGroup {
+        final public static String ADDRESS_GROUP_NOT_FOUND_EXCEPTION = "Address Group Not Found";
+        final public static String DEFAULT_ADDRESS_GROUP_CAN_NOT_BE_UPDATE_EXCEPTION  = "default address group can not be update";
+    }
+
+    public static class Address {
+        final public static String ADDRESS_NOT_FOUND_EXCEPTION = "Address Not Found";
+    }
+
+    public static class BusinessCard{
+        final public static String BUSINESS_CARD_NOT_FOUND_EXCEPTION = "Business Card Not Found";
+    }
 }

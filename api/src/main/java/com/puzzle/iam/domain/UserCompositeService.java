@@ -22,6 +22,7 @@ public class UserCompositeService {
     private final MailSender mailSender;
     private final RandomPassword randomPassword;
     private final UserEmailCompositeService userEmailCompositeService;
+    private final UserTrigger trigger;
 
     private static final String PWD_REGEX = "(\\d+[A-z]+)|([A-z]+\\d+)";
 
@@ -117,6 +118,7 @@ public class UserCompositeService {
         final var user = new User();
 
         assignUserData(user, request);
+        trigger.beforeCreateUser(user);
 
         return service.create(user);
     }

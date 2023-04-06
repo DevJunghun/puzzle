@@ -36,6 +36,7 @@ create table if not exists address_groups
     uuid              varchar(36)  not null,
     user_uuid         varchar(36)  not null,
     name              varchar(255) not null,
+    default_group tinyint not null default 1,
     has_parent_group  tinyint      not null default 0,
     parent_group_uuid varchar(36) null,
     deleted tinyint not null default 0,
@@ -45,7 +46,7 @@ create table if not exists address_groups
     primary key (id)
 );
 
-create table if not exists address
+create table if not exists addresses
 (
     id bigint not null auto_increment,
     uuid              varchar(36)  not null,
@@ -80,7 +81,7 @@ create table if not exists business_card_images
 (
     id bigint not null auto_increment,
     uuid         varchar(36) not null,
-    address_uuid varchar(36) not null,
+    business_card_uuid varchar(36) not null,
     image        blob null,
     deleted tinyint not null default 0,
     created_at   datetime(6) not null,
