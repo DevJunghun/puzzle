@@ -49,6 +49,11 @@ public class AddressService {
         repository.save(address);
     }
 
+    public void deleteBusinessCard(final Address address) {
+        address.setHasBusinessCard(false);
+        address.setUpdatedAt(LocalDateTime.now());
+    }
+
     private void validate(final Address address, final BooleanValidate validate, final String uuid) {
         if (validate.isTrue()) {
             if (address == null) {

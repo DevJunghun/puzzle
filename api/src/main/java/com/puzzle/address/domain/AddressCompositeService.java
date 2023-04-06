@@ -32,6 +32,7 @@ public class AddressCompositeService {
         if (address.isHasBusinessCard()) {
             final var businessCard = businessCardCompositeService.find(address.getUuid());
 
+            response.setBusinessCardUuid(businessCard.getUuid());
             response.setBusinessCardContent(businessCard.getContent());
         }
 
@@ -50,5 +51,11 @@ public class AddressCompositeService {
         final var address = service.find(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
 
         service.delete(address);
+    }
+
+    public void deleteBusinessCard(final String uuid) {
+        final var address = service.find(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
+
+        service.deleteBusinessCard(address);
     }
 }

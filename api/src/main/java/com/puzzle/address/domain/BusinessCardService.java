@@ -7,6 +7,8 @@ import com.puzzle.api.util.BooleanValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class BusinessCardService {
@@ -24,6 +26,19 @@ public class BusinessCardService {
         validate(uuid, businessCard, validate);
 
         return businessCard;
+    }
+
+    public void delete(final BusinessCard businessCard) {
+        businessCard.setUpdatedAt(LocalDateTime.now());
+        businessCard.setDeleted(true);
+
+        repository.save(businessCard);
+    }
+
+    public void update(final BusinessCard businessCard) {
+        businessCard.setUpdatedAt(LocalDateTime.now());
+
+        repository.save(businessCard);
     }
 
     private void validate(final String uuid, final BusinessCard businessCard, final BooleanValidate validate) {

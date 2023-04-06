@@ -27,11 +27,23 @@ public class BusinessCard {
     @Column(name = "address_uuid", nullable = false)
     private String addressUuid;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "rank", nullable = true)
+    private String rank;
+
+    @Column(name = "company_name", nullable = true)
+    private String companyName;
+
+    @Column(name ="company_url", nullable = true)
+    private String companyUrl;
+
+    @Column(name= "company_address", nullable = true)
+    private String companyAddress;
+
     @Column(name = "content", nullable = false)
     private String content;
-
-    @Column(name = "has_image", nullable = false)
-    private boolean hasImage = false;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;
