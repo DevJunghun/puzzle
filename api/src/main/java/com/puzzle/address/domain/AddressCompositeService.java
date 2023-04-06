@@ -14,6 +14,7 @@ import java.util.List;
 public class AddressCompositeService {
     private final AddressService service;
     private final BusinessCardCompositeService businessCardCompositeService;
+    private final AddressTrigger addressTrigger;
 
     public List<Address> findAll(final String groupUuid) {
         return service.findAll(groupUuid, BooleanDelete.TRUE);
@@ -49,6 +50,8 @@ public class AddressCompositeService {
 
     public void delete(final String uuid) {
         final var address = service.find(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
+
+        addressTrigger.deleteBusinessCard(address);
 
         service.delete(address);
     }

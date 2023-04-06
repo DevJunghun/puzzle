@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 public interface BusinessCardRepository extends JpaRepository<BusinessCard, String> {
     BusinessCard findByUuid(final String uuid);
     BusinessCard findByUuidAndDeletedIsFalse(final String uuid);
+
+    BusinessCard findByAddressUuid(final String addressUuid);
+    BusinessCard findByAddressUuidDeletedIsFalse(final String addressUuid);
 }

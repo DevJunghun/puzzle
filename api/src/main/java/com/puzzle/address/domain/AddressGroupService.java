@@ -60,7 +60,7 @@ public class AddressGroupService {
         repository.save(group);
     }
 
-    public AddressGroup save(final AddressGroup group) {
+    public AddressGroup create(final AddressGroup group) {
         final var now = LocalDateTime.now();
         group.setDeleted(false);
         group.setCreatedAt(now);

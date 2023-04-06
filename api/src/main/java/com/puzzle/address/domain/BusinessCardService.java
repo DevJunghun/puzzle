@@ -1,7 +1,6 @@
 package com.puzzle.address.domain;
 
 import com.puzzle.address.domain.exceptions.BusinessCardNotFoundException;
-import com.puzzle.api.exception.ExceptionCode;
 import com.puzzle.api.util.BooleanDelete;
 import com.puzzle.api.util.BooleanValidate;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +38,18 @@ public class BusinessCardService {
         businessCard.setUpdatedAt(LocalDateTime.now());
 
         repository.save(businessCard);
+    }
+
+    public BusinessCard findByAddressUuid(final String addressUuid, BooleanDelete delete, BooleanValidate validate) {
+        BusinessCard businessCard;
+
+        if (delete == BooleanDelete.FALSE) {
+            businessCard = repository.findByUuidAndDeletedIsFalse(addressUuid);
+        } else {
+            businessCard = repository.findByUuid(addressUuid);
+        }
+
+        return businessCard;
     }
 
     private void validate(final String uuid, final BusinessCard businessCard, final BooleanValidate validate) {

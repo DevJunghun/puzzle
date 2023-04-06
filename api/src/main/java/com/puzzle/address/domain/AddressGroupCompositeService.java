@@ -14,6 +14,7 @@ import java.util.List;
 public class AddressGroupCompositeService {
     private final AddressGroupService service;
     private final AddressCompositeService addressCompositeService;
+    private final AddressGroupTrigger addressGroupTrigger;
 
     private final static String DEFAULT_GROUP_NAME = "default";
 
@@ -32,21 +33,21 @@ public class AddressGroupCompositeService {
         final var group = createParentGroup(userUuid,DEFAULT_GROUP_NAME);
         group.setDefaultGroup(true);
 
-        final var savedGroup = service.save(group);
+        final var savedGroup = service.create(group);
 
         return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
     public AddressGroupDto.CreateParentGroup.Response createParentGroup(final String userUuid, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createParentGroup(userUuid, request.getName());
-        final var savedGroup = service.save(group);
+        final var savedGroup = service.create(group);
 
         return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
     public AddressGroupDto.CreateParentGroup.Response createChildGroup(final String userUuid, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createChildGroup(userUuid, groupUuid, request.getName());
-        final var savedGroup = service.save(group);
+        final var savedGroup = service.create(group);
 
         return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
@@ -62,6 +63,8 @@ public class AddressGroupCompositeService {
     public void delete(final String userUuid,final String groupUuid) {
         final var group = service.findByUuid(userUuid, groupUuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
         checkIfDefault(group);
+
+        addressGroupTrigger.deleteAllAddress(group);
 
         service.delete(group);
     }

@@ -7,6 +7,8 @@ import com.puzzle.api.util.Patch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BusinessCardCompositeService {
@@ -21,6 +23,14 @@ public class BusinessCardCompositeService {
 
     public void delete(final String uuid) {
         final var businessCard = service.find(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
+
+        trigger.beforeDelete(businessCard);
+
+        service.delete(businessCard);
+    }
+
+    public void deleteByAddress(final String addressUuid) {
+        final var businessCard = service.findByAddressUuid(addressUuid, BooleanDelete.FALSE, BooleanValidate.FALSE);
 
         trigger.beforeDelete(businessCard);
 
