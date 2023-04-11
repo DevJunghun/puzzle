@@ -30,6 +30,9 @@ public class BusinessCard {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "rank", nullable = true)
     private String rank;
 
@@ -41,9 +44,6 @@ public class BusinessCard {
 
     @Column(name= "company_address", nullable = true)
     private String companyAddress;
-
-    @Column(name = "content", nullable = false)
-    private String content;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;

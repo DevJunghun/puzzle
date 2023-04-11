@@ -12,8 +12,7 @@ public class AddressDto {
             private String email;
             private String phoneNumber;
             private long useCount;
-            private String businessCardUuid;
-            private String businessCardContent;
+            private BusinessCardDto.BusinessCard businessCard;
         }
     }
 

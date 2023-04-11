@@ -21,7 +21,6 @@ public class AddressGroupCompositeService {
     public AddressGroupDto.GetAllGroups.Response findAll(final String userUuid) {
         final var groups = service.findAll(userUuid, BooleanDelete.FALSE);
 
-
         final var groupDtos = groups.stream()
                 .map(this::getGroupDto)
                 .toList();

@@ -1,6 +1,7 @@
 package com.puzzle.address.domain;
 
 import com.puzzle.address.controller.dto.AddressDto;
+import com.puzzle.address.controller.dto.BusinessCardDto;
 import com.puzzle.api.util.BooleanDelete;
 import com.puzzle.api.util.BooleanValidate;
 import com.puzzle.api.util.Patch;
@@ -33,8 +34,7 @@ public class AddressCompositeService {
         if (address.isHasBusinessCard()) {
             final var businessCard = businessCardCompositeService.find(address.getUuid());
 
-            response.setBusinessCardUuid(businessCard.getUuid());
-            response.setBusinessCardContent(businessCard.getContent());
+            response.setBusinessCard(new BusinessCardDto.BusinessCard(businessCard));
         }
 
         return response;

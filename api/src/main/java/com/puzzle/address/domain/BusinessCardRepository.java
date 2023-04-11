@@ -9,5 +9,5 @@ public interface BusinessCardRepository extends JpaRepository<BusinessCard, Stri
     BusinessCard findByUuidAndDeletedIsFalse(final String uuid);
 
     BusinessCard findByAddressUuid(final String addressUuid);
-    BusinessCard findByAddressUuidDeletedIsFalse(final String addressUuid);
+    BusinessCard findByAddressUuidAndDeletedIsFalse(final String addressUuid);
 }
