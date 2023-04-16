@@ -12,20 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/business-card", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 public class BusinessCardController {
-    private final BusinessCardCompositeService service;
+    private final BusinessCardCompositeService compositeService;
 
     @GetMapping("/{uuid}")
     public BusinessCardDto.Get.Response get(final @PathVariable String uuid) {
-        return service.get(uuid);
-    }
-
-    @DeleteMapping("/{uuid}")
-    public void delete(final @PathVariable String uuid) {
-        service.delete(uuid);
+        return compositeService.get(uuid);
     }
 
     @PatchMapping("/{uuid}")
     public void update(final @PathVariable String uuid, final @RequestBody BusinessCardDto.Update.Request request) {
-        service.update(uuid, request);
+        compositeService.update(uuid, request);
     }
 }

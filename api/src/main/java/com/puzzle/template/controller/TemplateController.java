@@ -40,7 +40,7 @@ public class TemplateController {
     }
 
     @DeleteMapping()
-    public void delete(@RequestBody TemplateDto.Delete.Request request, @RequestHeader(HEADER_KEY) String userToken) {
+    public void delete(@RequestHeader(HEADER_KEY) String userToken) {
     }
 
     @PatchMapping()

@@ -32,6 +32,6 @@ public class TemplateCategoryController {
     }
 
     @DeleteMapping()
-    public void delete(@RequestBody TemplateCategoryDto.Delete.Request request, @RequestHeader(HEADER_KEY) String userToken) {
+    public void delete(@RequestHeader(HEADER_KEY) String userToken) {
     }
 }
