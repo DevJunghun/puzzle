@@ -4,7 +4,6 @@ import com.puzzle.api.util.BooleanDelete;
 import com.puzzle.api.util.BooleanValidate;
 import com.puzzle.api.util.MailSender;
 import com.puzzle.api.util.RandomPassword;
-import com.puzzle.email.domain.UserEmailCompositeService;
 import com.puzzle.iam.controller.dto.SignInDto;
 import com.puzzle.iam.domain.exceptions.AlreadyExistUserException;
 import com.puzzle.iam.domain.exceptions.NotValidPasswordException;
@@ -21,7 +20,6 @@ public class UserCompositeService {
     private final UserService service;
     private final MailSender mailSender;
     private final RandomPassword randomPassword;
-    private final UserEmailCompositeService userEmailCompositeService;
     private final UserTrigger trigger;
 
     private static final String PWD_REGEX = "(\\d+[A-z]+)|([A-z]+\\d+)";
@@ -93,9 +91,6 @@ public class UserCompositeService {
         validExistUser(request.getUsername());
         validPwdRegex(request.getPwd());
         checkDuplicateMainEmail(request.getEmail());
-    }
-    private void validEmailIfExist(final String email) {
-        userEmailCompositeService.findEmailExists(email);
     }
 
     private void checkDuplicateMainEmail(final String email) {

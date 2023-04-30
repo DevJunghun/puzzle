@@ -2,6 +2,7 @@ package com.puzzle.address.controller;
 
 import com.puzzle.address.controller.dto.AddressDto;
 import com.puzzle.address.domain.AddressCompositeService;
+import com.puzzle.address.domain.AddressTransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,16 +14,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/address", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 public class AddressController {
+    private final AddressTransactionService transactionService;
     private final AddressCompositeService compositeService;
 
     @GetMapping("/{uuid}")
     public AddressDto.Get.Response get(final @PathVariable String uuid) {
-        return compositeService.find(uuid);
+        return transactionService.find(uuid);
     }
 
     @PutMapping()
     public AddressDto.Create.Response create(final @Valid  @RequestBody AddressDto.Create.Request request) {
-        return compositeService.create(request);
+        return transactionService.create(request);
     }
 
     @PatchMapping("/{uuid}")

@@ -2,6 +2,7 @@ package com.puzzle.address.controller;
 
 import com.puzzle.address.domain.AddressGroupCompositeService;
 import com.puzzle.address.controller.dto.AddressGroupDto;
+import com.puzzle.address.domain.AddressGroupTransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,10 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AddressGroupController {
     private final AddressGroupCompositeService compositeService;
+    private final AddressGroupTransactionService transactionService;
 
     @GetMapping("/")
     public AddressGroupDto.GetAllGroups.Response getAll(final @PathVariable String userUuid) {
-        return compositeService.findAll(userUuid);
+        return transactionService.findAll(userUuid);
     }
 
     @PutMapping("/")

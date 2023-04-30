@@ -4,6 +4,7 @@ import com.puzzle.address.controller.dto.AddressGroupDto;
 import com.puzzle.address.domain.exceptions.DefaultAddressGroupCanNotBeUpdateException;
 import com.puzzle.api.util.BooleanDelete;
 import com.puzzle.api.util.BooleanValidate;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,7 @@ public class AddressGroupCompositeService {
         return service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
     }
 
-    public AddressGroupDto.GetAllGroups.Response findAll(final String userUuid) {
-        final var groups = service.findAll(userUuid, BooleanDelete.FALSE);
-
-        final var groupDtos = groups.stream()
-                .map(this::getGroupDto)
-                .toList();
-
-        return new AddressGroupDto.GetAllGroups.Response(groupDtos);
-    }
-
+    @Transactional
     public AddressGroupDto.CreateParentGroup.Response createDefaultGroup(final String userUuid) {
         final var group = createParentGroup(userUuid, DEFAULT_GROUP_NAME);
         group.setDefaultGroup(true);
@@ -41,6 +33,7 @@ public class AddressGroupCompositeService {
         return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
+    @Transactional
     public AddressGroupDto.CreateParentGroup.Response createParentGroup(final String userUuid, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createParentGroup(userUuid, request.getName());
         final var savedGroup = service.create(group);
@@ -48,6 +41,7 @@ public class AddressGroupCompositeService {
         return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
+    @Transactional
     public AddressGroupDto.CreateParentGroup.Response createChildGroup(final String userUuid, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createChildGroup(userUuid, groupUuid, request.getName());
         final var savedGroup = service.create(group);
@@ -55,6 +49,7 @@ public class AddressGroupCompositeService {
         return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
+    @Transactional
     public void update(final String userUuid, final String groupUuid, final AddressGroupDto.UpdateGroup.Request request) {
         final var group = service.findByUuid(userUuid, groupUuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
         checkIfDefault(group);
@@ -63,6 +58,7 @@ public class AddressGroupCompositeService {
         service.update(group);
     }
 
+    @Transactional
     public void delete(final String userUuid, final String groupUuid) {
         final var group = service.findByUuid(userUuid, groupUuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
         checkIfDefault(group);
