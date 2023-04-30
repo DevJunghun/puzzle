@@ -66,11 +66,11 @@ class AddressControllerTest extends BaseTest {
                     final var actual = RestClientFactory.get(CLASS_URL + "/" + addressUuids.get(0), null);
 
                     org.junit.jupiter.api.Assertions.assertAll(
-                            () -> org.junit.jupiter.api.Assertions.assertEquals(Const.User.EMAIL, "email"),
-                            () -> org.junit.jupiter.api.Assertions.assertEquals("newAddress", actual.getString("name")),
-                            () -> org.junit.jupiter.api.Assertions.assertEquals("leader", actual.getString("rank")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals(Const.User.EMAIL, actual.getString("email")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("newAddress2", actual.getString("name")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("teamleader", actual.getString("rank")),
                             () -> org.junit.jupiter.api.Assertions.assertEquals("01012345678", actual.getString("phoneNumber")),
-                            () -> org.junit.jupiter.api.Assertions.assertEquals("puzzle", actual.getString("companyName"))
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("puzzleEmail", actual.getString("companyName"))
                     );
                 }),
 
