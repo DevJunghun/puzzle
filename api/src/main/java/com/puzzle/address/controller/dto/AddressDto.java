@@ -46,6 +46,9 @@ public class AddressDto {
             private String name;
             private String email;
             private String phoneNumber;
+            private String rank;
+            private String department;
+            private String companyName;
             private long useCount;
             private BusinessCardDto.BusinessCard businessCard;
         }

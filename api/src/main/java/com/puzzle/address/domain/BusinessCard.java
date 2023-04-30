@@ -37,6 +37,9 @@ public class BusinessCard {
     @Column(name = "rank", nullable = true)
     private String rank;
 
+    @Column(name = "department", nullable = true)
+    private String department;
+
     @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
 

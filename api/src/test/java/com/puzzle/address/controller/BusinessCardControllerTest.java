@@ -3,7 +3,7 @@ package com.puzzle.address.controller;
 import com.puzzle.RestClientFactory;
 import com.puzzle.api.BaseTest;
 import com.puzzle.utils.Const;
-import net.minidev.json.JSONObject;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Description;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Supplier;
 
 class BusinessCardControllerTest extends BaseTest {
     private final static String CLASS_URL = "/business-card";
@@ -20,19 +19,28 @@ class BusinessCardControllerTest extends BaseTest {
     @TestFactory
     Collection<DynamicNode> crud_test_for_business_card() {
         final var addressUuids = new ArrayList<String>();
+        final var businessCardUuids = new ArrayList<String>();
 
         return group(
-                group("user create",  AddressControllerTest.create_address(addressUuids)),
+                group("address 를 만든다",
+                    AddressControllerTest.create_address(addressUuids)
+                ),
+
+                single("business card uuid 를 받아온다.", () -> {
+                    final var address = AddressControllerTest.getAddressInfo(addressUuids.get(0));
+
+                    businessCardUuids.add(address.getJSONObject("businessCard").getString("uuid"));
+                }),
 
                 single("business card 가 자동생성 되었는지 확인한다.", () -> {
-                    final var actual = RestClientFactory.get(CLASS_URL + "/" + addressUuids.get(0), null);
+                    final var actual = RestClientFactory.get(CLASS_URL + "/" + businessCardUuids.get(0), null);
 
                     Assertions.assertAll(
-                            () -> Assertions.assertEquals("email", Const.User.EMAIL),
-                            () -> Assertions.assertEquals("name", actual.getString("newAddress")),
-                            () -> Assertions.assertEquals("rank", actual.getString("leader")),
-                            () -> Assertions.assertEquals("phoneNumber", actual.getString("01012345678")),
-                            () -> Assertions.assertEquals("companyName", actual.getString("puzzle"))
+                            () -> Assertions.assertEquals(Const.User.EMAIL, actual.getString("email")),
+                            () -> Assertions.assertEquals("newAddress", actual.getString("name")),
+                            () -> Assertions.assertEquals("leader", actual.getString("rank")),
+                            () -> Assertions.assertEquals("01012345678", actual.getString("phoneNumber")),
+                            () -> Assertions.assertEquals("puzzle", actual.getString("companyName"))
                     );
                 }),
 
@@ -46,18 +54,18 @@ class BusinessCardControllerTest extends BaseTest {
                     body.put("companyUrl", "asda@google.com");
                     body.put("companyAddress", "Seoul");
 
-                    RestClientFactory.patch(CLASS_URL + "/" + addressUuids.get(0), null);
+                    RestClientFactory.patch(CLASS_URL + "/" + businessCardUuids.get(0), body);
 
-                    final var actual = RestClientFactory.get(CLASS_URL + "/" + addressUuids.get(0), null);
+                    final var actual = RestClientFactory.get(CLASS_URL + "/" + businessCardUuids.get(0), null);
 
                     Assertions.assertAll(
-                            () -> Assertions.assertEquals("email", Const.User.EMAIL),
-                            () -> Assertions.assertEquals("name", actual.getString("newAddress2")),
-                            () -> Assertions.assertEquals("rank", actual.getString("teamleader")),
-                            () -> Assertions.assertEquals("phoneNumber", actual.getString("01012345679")),
-                            () -> Assertions.assertEquals("companyName", actual.getString("puzzle")),
-                            () -> Assertions.assertEquals("companyUrl", actual.getString("asda@google.com")),
-                            () -> Assertions.assertEquals("companyAddress", actual.getString("Seoul"))
+                            () -> Assertions.assertEquals(Const.User.EMAIL, actual.getString("email")),
+                            () -> Assertions.assertEquals("newAddress2", actual.getString("name")),
+                            () -> Assertions.assertEquals("teamleader", actual.getString("rank")),
+                            () -> Assertions.assertEquals("01012345679", actual.getString("phoneNumber")),
+                            () -> Assertions.assertEquals("puzzle", actual.getString("companyName")),
+                            () -> Assertions.assertEquals("asda@google.com", actual.getString("companyUrl")),
+                            () -> Assertions.assertEquals("Seoul", actual.getString("companyAddress"))
                     );
                 })
         );

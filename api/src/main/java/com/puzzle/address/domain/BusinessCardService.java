@@ -50,10 +50,10 @@ public class BusinessCardService {
     public BusinessCard findByAddressUuid(final String addressUuid, BooleanDelete delete, BooleanValidate validate) {
         BusinessCard businessCard;
 
-        if (delete == BooleanDelete.FALSE) {
-            businessCard = repository.findByUuidAndDeletedIsFalse(addressUuid);
+        if (delete.isTrue()) {
+            businessCard = repository.findByAddressUuid(addressUuid);
         } else {
-            businessCard = repository.findByUuid(addressUuid);
+            businessCard = repository.findByAddressUuidAndDeletedIsFalse(addressUuid);
         }
 
         return businessCard;

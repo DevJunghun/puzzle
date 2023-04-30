@@ -50,7 +50,7 @@ public class Address {
     private long useCount = 0;
 
     @Column(name = "has_business_card", nullable = false)
-    private boolean hasBusinessCard = false;
+    private boolean hasBusinessCard = true;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted = false;

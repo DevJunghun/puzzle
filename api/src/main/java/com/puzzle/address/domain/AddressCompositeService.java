@@ -18,7 +18,8 @@ public class AddressCompositeService {
 
     @Transactional
     public Address create(final AddressDto.Create.Request request) {
-        return createAddress(request);
+        final var address =  createAddress(request);
+        return service.create(address);
     }
 
     @Transactional

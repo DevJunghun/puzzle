@@ -21,6 +21,7 @@ public class BusinessCardCompositeService {
         businessCard.setName(address.getName());
         businessCard.setEmail(address.getEmail());
         businessCard.setRank(address.getRank());
+        businessCard.setDepartment(address.getDepartment());
         businessCard.setPhoneNumber(address.getPhoneNumber());
         businessCard.setCompanyName(address.getCompanyName());
 
@@ -44,8 +45,8 @@ public class BusinessCardCompositeService {
     }
 
     @Transactional
-    public BusinessCard find(final String uuid) {
-        return service.find(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
+    public BusinessCard findByAddressUuid(final String uuid) {
+        return service.findByAddressUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
     }
 
     @Transactional

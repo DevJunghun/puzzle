@@ -38,9 +38,12 @@ public class AddressTransactionService {
         response.setEmail(address.getEmail());
         response.setUseCount(address.getUseCount());
         response.setPhoneNumber(address.getPhoneNumber());
+        response.setRank(address.getRank());
+        response.setDepartment(address.getDepartment());
+        response.setCompanyName(address.getCompanyName());
 
         if (address.isHasBusinessCard()) {
-            final var businessCard = businessCardCompositeService.find(address.getUuid());
+            final var businessCard = businessCardCompositeService.findByAddressUuid(address.getUuid());
 
             response.setBusinessCard(new BusinessCardDto.BusinessCard(businessCard));
         }

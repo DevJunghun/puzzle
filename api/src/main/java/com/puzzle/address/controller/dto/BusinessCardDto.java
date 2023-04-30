@@ -10,7 +10,6 @@ import lombok.Setter;
 public class BusinessCardDto {
     public static class Get {
         @Getter
-        @Setter
         @NoArgsConstructor
         public static class Response {
             private String email;
@@ -22,15 +21,13 @@ public class BusinessCardDto {
             private String companyAddress;
 
             public Response(com.puzzle.address.domain.BusinessCard businessCard) {
-                final var response = new Response();
-
-                response.setEmail(businessCard.getEmail());
-                response.setName(businessCard.getName());
-                response.setRank(businessCard.getRank());
-                response.setPhoneNumber(businessCard.getPhoneNumber());
-                response.setCompanyName(businessCard.getCompanyName());
-                response.setCompanyUrl(businessCard.getCompanyUrl());
-                response.setCompanyAddress(businessCard.getCompanyAddress());
+                this.name = businessCard.getName();
+                this.email = businessCard.getEmail();
+                this.rank = businessCard.getRank();
+                this.phoneNumber = businessCard.getPhoneNumber();
+                this.companyName = businessCard.getCompanyName();
+                this.companyUrl = businessCard.getCompanyUrl();
+                this.companyAddress = businessCard.getCompanyAddress();
             }
         }
     }
@@ -58,6 +55,8 @@ public class BusinessCardDto {
         private String name;
         private String email;
         private String rank;
+        private String phoneNumber;
+        private String department;
         private String companyName;
         private String companyUrl;
         private String companyAddress;
@@ -67,6 +66,8 @@ public class BusinessCardDto {
             this.name = businessCard.getName();
             this.email = businessCard.getEmail();
             this.rank = businessCard.getRank();
+            this.department = businessCard.getDepartment();
+            this.phoneNumber = businessCard.getPhoneNumber();
             this.companyName = businessCard.getCompanyName();
             this.companyUrl = businessCard.getCompanyUrl();
             this.companyAddress = businessCard.getCompanyAddress();

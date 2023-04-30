@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Description;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Supplier;
 
 class AddressControllerTest extends BaseTest {
     private final static String CLASS_URL = "/address";
@@ -64,10 +63,15 @@ class AddressControllerTest extends BaseTest {
 
                     RestClientFactory.patch(CLASS_URL + "/" + addressUuids.get(0), body);
 
-                    final var addressGroups = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);
-                    final var a = addressGroups.getJSONArray("group").getJSONObject(0).getJSONArray("address").getJSONObject(0);
+                    final var actual = RestClientFactory.get(CLASS_URL + "/" + addressUuids.get(0), null);
 
-                    Assertions.assertThat(a.getString("name")).isEqualTo("newAddress2");
+                    org.junit.jupiter.api.Assertions.assertAll(
+                            () -> org.junit.jupiter.api.Assertions.assertEquals(Const.User.EMAIL, "email"),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("newAddress", actual.getString("name")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("leader", actual.getString("rank")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("01012345678", actual.getString("phoneNumber")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("puzzle", actual.getString("companyName"))
+                    );
                 }),
 
                 single("address delete", () -> {
@@ -106,8 +110,22 @@ class AddressControllerTest extends BaseTest {
 
                     final var addressCreated = RestClientFactory.put(CLASS_URL, body);
 
+                    final var created = RestClientFactory.get(CLASS_URL + "/" + addressCreated.getString("uuid"), null);
+
+                    org.junit.jupiter.api.Assertions.assertAll(
+                            () -> org.junit.jupiter.api.Assertions.assertEquals(Const.User.EMAIL,created.getString("email")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("newAddress", created.getString("name")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("leader", created.getString("rank")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("01012345678", created.getString("phoneNumber")),
+                            () -> org.junit.jupiter.api.Assertions.assertEquals("puzzle", created.getString("companyName"))
+                    );
+
                     addressUuids.add(addressCreated.getString("uuid"));
                 })
         );
+    }
+
+    public static JSONObject getAddressInfo(final String uuid) {
+        return RestClientFactory.get(CLASS_URL + "/" + uuid, null);
     }
 }
