@@ -14,6 +14,13 @@ import java.util.List;
 public class AddressService {
     private final AddressRepository repository;
 
+    public Address create(final Address address) {
+        address.setCreatedAt(LocalDateTime.now());
+        address.setUpdatedAt(LocalDateTime.now());
+
+        return repository.save(address);
+    }
+
     public List<Address> findAll(final String groupUuid, BooleanDelete delete) {
         if (delete.isTrue()) {
             return repository.findAllByGroupUuid(groupUuid);
@@ -47,11 +54,6 @@ public class AddressService {
         address.setUpdatedAt(LocalDateTime.now());
 
         repository.save(address);
-    }
-
-    public void deleteBusinessCard(final Address address) {
-        address.setHasBusinessCard(false);
-        address.setUpdatedAt(LocalDateTime.now());
     }
 
     private void validate(final Address address, final BooleanValidate validate, final String uuid) {

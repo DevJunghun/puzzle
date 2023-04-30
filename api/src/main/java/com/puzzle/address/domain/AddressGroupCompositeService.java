@@ -18,6 +18,10 @@ public class AddressGroupCompositeService {
 
     private final static String DEFAULT_GROUP_NAME = "default";
 
+    public AddressGroup find(final String uuid) {
+        return service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
+    }
+
     public AddressGroupDto.GetAllGroups.Response findAll(final String userUuid) {
         final var groups = service.findAll(userUuid, BooleanDelete.FALSE);
 

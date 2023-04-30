@@ -32,6 +32,21 @@ public class AddressGroupService {
         }
     }
 
+    public AddressGroup findByUuid(final String uuid, final BooleanDelete delete, final BooleanValidate validate) {
+        AddressGroup addressGroup;
+
+        if (delete.isTrue()) {
+            addressGroup =  repository.findByUuid(uuid);
+
+        } else {
+            addressGroup =  repository.findByUuidAndDeletedIsFalse(uuid);
+        }
+
+        checkValidate(validate, addressGroup, uuid);
+
+        return addressGroup;
+    }
+
     public AddressGroup findByUuid(final String userUuid, final String uuid, final BooleanDelete delete, final BooleanValidate validate) {
         AddressGroup addressGroup;
 

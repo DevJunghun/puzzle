@@ -31,6 +31,15 @@ public class Address {
     @Column(name = "group_uuid", nullable = false)
     private String groupUuid;
 
+    @Column(name = "rank", nullable = true)
+    private String rank;
+
+    @Column(name = "department", nullable = true)
+    private String department;
+
+    @Column(name = "company_name", nullable = true)
+    private String companyName;
+
     @Column(name = "email", nullable = false)
     private String email;
 

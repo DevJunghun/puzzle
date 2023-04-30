@@ -15,4 +15,7 @@ public interface AddressGroupRepository  extends JpaRepository<AddressGroup, Str
 
     AddressGroup findByUuidAndUserUuid(final String uuid, final String userUuid);
     AddressGroup findByUuidAndUserUuidAndDeletedIsFalse(final String uuid, final String userUuid);
+
+    AddressGroup findByUuid(final String uuid);
+    AddressGroup findByUuidAndDeletedIsFalse(final String uuid);
 }
