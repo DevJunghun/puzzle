@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
@@ -77,6 +78,28 @@ public class RestClientFactory {
         handleException(jsonObject, expectExceptionClass);
     }
 
+    public static JSONObject patch(final String uri, final JSONObject body) {
+        final var client = client();
+
+        final var response = client.patch().uri(uri).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(body.toString())).exchangeToMono(rawResponse -> {
+            handleException(rawResponse, uri, HttpMethod.PUT.name());
+
+            return rawResponse.bodyToMono(Object.class);
+        }).block();
+
+        return getJsonObject(response);
+    }
+
+    public static void patchAssertFail(final String uri, final JSONObject body, final Class expectExceptionClass) {
+        final var client = client();
+
+        final var response = client.patch().uri(uri).contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(body.toString()))
+                .exchangeToMono(rawResponse -> rawResponse.bodyToMono(Object.class)).block();
+
+        final var jsonObject = getJsonObject(response);
+        handleException(jsonObject, expectExceptionClass);
+    }
+
     public static JSONObject delete(final String uri) {
         final var client = client();
 
@@ -121,7 +144,10 @@ public class RestClientFactory {
     }
 
     private static WebClient client() {
-        return WebClient.builder().baseUrl(BASE_URL).build();
+        return WebClient.builder()
+                .baseUrl(BASE_URL)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
     }
 
     private static void handleException(JSONObject jsonObject, final Class expectExceptionClass) {

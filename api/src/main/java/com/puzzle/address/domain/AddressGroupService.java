@@ -36,10 +36,10 @@ public class AddressGroupService {
         AddressGroup addressGroup;
 
         if (delete.isTrue()) {
-            addressGroup =  repository.findByUuidAndUserUuid(userUuid, uuid);
+            addressGroup =  repository.findByUuidAndUserUuid(uuid, userUuid);
 
         } else {
-            addressGroup =  repository.findByUuidAndUserUuidAndDeletedIsFalse(userUuid, uuid);
+            addressGroup =  repository.findByUuidAndUserUuidAndDeletedIsFalse(uuid, userUuid);
         }
 
         checkValidate(validate, addressGroup, uuid);

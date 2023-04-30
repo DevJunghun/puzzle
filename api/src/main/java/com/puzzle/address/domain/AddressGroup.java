@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "address_groups")
@@ -22,7 +23,7 @@ public class AddressGroup {
     private Long id;
 
     @Column(name = "uuid", nullable = false)
-    private String uuid;
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "user_uuid", nullable = false)
     private String userUuid;

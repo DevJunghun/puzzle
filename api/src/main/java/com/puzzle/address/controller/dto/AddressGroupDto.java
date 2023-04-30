@@ -11,6 +11,7 @@ import java.util.List;
 public class AddressGroupDto {
     public static class GetAllGroups {
         @AllArgsConstructor
+        @Getter
         public static class Response {
             private List<Group> group;
         }
@@ -42,14 +43,16 @@ public class AddressGroupDto {
 
     @AllArgsConstructor
     @Setter
+    @Getter
     public static class Group{
         private String name;
         private String uuid;
-        private List<Group> group;
+        private List<String> innerGroupNames;
         private List<Address> address;
     }
 
     @AllArgsConstructor
+    @Getter
     public static class Address{
         private String name;
         private String uuid;

@@ -29,7 +29,7 @@ public class AddressGroupCompositeService {
     }
 
     public AddressGroupDto.CreateParentGroup.Response createDefaultGroup(final String userUuid) {
-        final var group = createParentGroup(userUuid,DEFAULT_GROUP_NAME);
+        final var group = createParentGroup(userUuid, DEFAULT_GROUP_NAME);
         group.setDefaultGroup(true);
 
         final var savedGroup = service.create(group);
@@ -59,7 +59,7 @@ public class AddressGroupCompositeService {
         service.update(group);
     }
 
-    public void delete(final String userUuid,final String groupUuid) {
+    public void delete(final String userUuid, final String groupUuid) {
         final var group = service.findByUuid(userUuid, groupUuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
         checkIfDefault(group);
 
@@ -98,7 +98,11 @@ public class AddressGroupCompositeService {
         groupDto.setAddress(addresses);
 
         final var groupInGroup = findAllByParentGroup(group.getUuid());
-        groupDto.setGroup(groupInGroup);
+        final var nameOfGroupInGroup = groupInGroup == null ? null : groupInGroup.stream()
+                .map(AddressGroupDto.Group::getName)
+                .toList();
+
+        groupDto.setInnerGroupNames(nameOfGroupInGroup);
 
         return groupDto;
     }
