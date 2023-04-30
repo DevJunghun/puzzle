@@ -22,17 +22,17 @@ public class AddressController {
         return transactionService.find(uuid);
     }
 
-    @PutMapping()
+    @PutMapping("")
     public AddressDto.Create.Response create(final @Valid  @RequestBody AddressDto.Create.Request request) {
         return transactionService.create(request);
     }
 
     @PatchMapping("/{uuid}")
-    public void update(final @PathVariable String uuid, final @RequestBody AddressDto.Update.Request request) {
+    public void update(final @PathVariable String uuid, final @Valid @RequestBody AddressDto.Update.Request request) {
         compositeService.update(uuid, request);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/{uuid}")
     public void delete(final @PathVariable String uuid) {
         compositeService.delete(uuid);
     }

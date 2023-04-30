@@ -24,7 +24,9 @@ public class BusinessCardCompositeService {
     public void deleteByAddress(final String addressUuid) {
         final var businessCard = service.findByAddressUuid(addressUuid, BooleanDelete.FALSE, BooleanValidate.FALSE);
 
-        service.delete(businessCard);
+        if (businessCard != null) {
+            service.delete(businessCard);
+        }
     }
 
     @Transactional

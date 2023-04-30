@@ -1,7 +1,7 @@
 drop table if exists users;
 drop table if exists user_emails;
 drop table if exists address_groups;
-drop table if exists address;
+drop table if exists addresses;
 drop table if exists business_cards;
 drop table if exists business_card_images;
 drop table if exists mail_logs;

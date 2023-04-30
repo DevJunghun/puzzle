@@ -8,13 +8,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class AddressGroupCompositeService {
     private final AddressGroupService service;
-    private final AddressCompositeService addressCompositeService;
     private final AddressGroupTrigger addressGroupTrigger;
 
     private final static String DEFAULT_GROUP_NAME = "default";
@@ -89,42 +86,6 @@ public class AddressGroupCompositeService {
         group.setDefaultGroup(false);
 
         return group;
-    }
-
-    private AddressGroupDto.Group getGroupDto(final AddressGroup group) {
-        final var groupDto = new AddressGroupDto.Group(group.getName(), group.getUuid(), null, null);
-
-        final var addresses = getAllAddressInGroup(group);
-        groupDto.setAddress(addresses);
-
-        final var groupInGroup = findAllByParentGroup(group.getUuid());
-        final var nameOfGroupInGroup = groupInGroup == null ? null : groupInGroup.stream()
-                .map(AddressGroupDto.Group::getName)
-                .toList();
-
-        groupDto.setInnerGroupNames(nameOfGroupInGroup);
-
-        return groupDto;
-    }
-
-    private List<AddressGroupDto.Group> findAllByParentGroup(final String parentUuid) {
-        final var groups = service.findAllByParentGroup(parentUuid, BooleanDelete.FALSE);
-
-        if (groups.size() == 0) {
-            return null;
-        }
-
-        return groups.stream()
-                .map(this::getGroupDto)
-                .toList();
-
-    }
-
-    private List<AddressGroupDto.Address> getAllAddressInGroup(final AddressGroup group) {
-        return addressCompositeService.findAll(group.getUuid())
-                .stream()
-                .map(address -> new AddressGroupDto.Address(address.getName(), address.getUuid()))
-                .toList();
     }
 
     private void checkIfDefault(final AddressGroup group) {

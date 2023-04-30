@@ -21,6 +21,7 @@ class AddressControllerTest extends BaseTest {
     Collection<DynamicNode> crud_test_for_address() {
         final var userUuids = new ArrayList<String>();
         final var addressGroupUuids = new ArrayList<String>();
+        final var addressUuids = new ArrayList<String>();
 
         return group(
                 UserControllerTest.create_user(Const.User.USER_NAME, Const.User.PASSWORD, Const.User.EMAIL, userUuids),
@@ -40,16 +41,41 @@ class AddressControllerTest extends BaseTest {
                     body.put("email", Const.User.EMAIL);
                     body.put("phoneNumber", "01012345678");
                     body.put("rank", "leader");
-                    body.put("department", "devlopment");
+                    body.put("department", "development");
                     body.put("companyName", "puzzle");
 
                     final var actual = RestClientFactory.put(CLASS_URL, body);
 
-                    Assertions.assertThat(true).isTrue();
+                    Assertions.assertThat(actual.getString("uuid")).isNotNull();
+                    addressUuids.add(actual.getString("uuid"));
+                }),
+
+                single("address update", () -> {
+                    final var body = new JSONObject();
+
+                    body.put("name", "newAddress2");
+                    body.put("email", Const.User.EMAIL);
+                    body.put("phoneNumber", "01012345678");
+                    body.put("rank", "teamleader");
+                    body.put("department", "development");
+                    body.put("companyName", "puzzleEmail");
+
+                    RestClientFactory.patch(CLASS_URL + "/" + addressUuids.get(0), body);
+
+                    final var addressGroups = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);
+                    final var a = addressGroups.getJSONArray("group").getJSONObject(0).getJSONArray("address").getJSONObject(0);
+
+                    Assertions.assertThat(a.getString("name")).isEqualTo("newAddress2");
+                }),
+
+                single("address delete", () -> {
+                    RestClientFactory.delete(CLASS_URL + "/" + addressUuids.get(0));
+
+                    final var addressGroups = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);
+                    final var addresses = addressGroups.getJSONArray("group").getJSONObject(0).getJSONArray("address");
+
+                    Assertions.assertThat(addresses.length()).isEqualTo(0);
                 })
         );
     }
-
-
-
 }

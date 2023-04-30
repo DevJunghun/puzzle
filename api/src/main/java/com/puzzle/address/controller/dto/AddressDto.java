@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 public class AddressDto {
 
@@ -15,18 +16,18 @@ public class AddressDto {
             @NotEmpty
             private String groupUuid;
             @NotEmpty
-            @Max(20)
+            @Length(max = 20)
             private String name;
             @NotEmpty
             @Email
             private String email;
-            @Max(20)
+            @Length(max = 20)
             private String phoneNumber;
-            @Max(20)
+            @Length(max = 20)
             private String rank;
-            @Max(20)
+            @Length(max = 20)
             private String department;
-            @Max(20)
+            @Length(max = 20)
             private String companyName;
 
         }
@@ -53,9 +54,21 @@ public class AddressDto {
     public static class Update {
         @Getter
         public static class Request {
+            @Length(max = 20)
             private String name;
+            @Email
             private String email;
+            @Length(max = 20)
             private String phoneNumber;
+            @Length(max = 20)
+            private String rank;
+            @Length(max = 20)
+            private String department;
+            @Length(max = 20)
+            private String companyName;
+
+            public Request() {
+            }
         }
     }
 }

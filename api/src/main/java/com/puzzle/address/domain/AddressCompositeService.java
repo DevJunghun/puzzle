@@ -27,7 +27,7 @@ public class AddressCompositeService {
 
     @Transactional
     public List<Address> findAll(final String groupUuid) {
-        return service.findAll(groupUuid, BooleanDelete.TRUE);
+        return service.findAll(groupUuid, BooleanDelete.FALSE);
     }
 
     @Transactional
