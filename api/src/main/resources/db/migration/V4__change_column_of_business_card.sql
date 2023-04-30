@@ -8,7 +8,10 @@ ALTER TABLE `business_cards`
     ADD COLUMN `rank` varchar(255) NULL AFTER `email`;
 
 ALTER TABLE `business_cards`
-    ADD COLUMN `company_name` varchar(255) NULL AFTER `rank`;
+    ADD COLUMN `phone_number` varchar(255) NULL AFTER `rank`;
+
+ALTER TABLE `business_cards`
+    ADD COLUMN `company_name` varchar(255) NULL AFTER `phone_number`;
 
 ALTER TABLE `business_cards`
     ADD COLUMN `company_url` varchar(255) NULL AFTER `company_name`;

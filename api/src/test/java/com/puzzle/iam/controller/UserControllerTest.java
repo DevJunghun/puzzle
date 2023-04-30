@@ -92,7 +92,7 @@ public class UserControllerTest extends BaseTest {
 
             org.assertj.core.api.Assertions.assertThat(actual.get("uuid")).isNotNull().isNotEqualTo("");
 
-            userUuids.add(actual.get("uuid").toString());
+            userUuids.add(actual.getString("uuid"));
         });
     }
 }

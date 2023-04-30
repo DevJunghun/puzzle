@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "business_cards")
@@ -22,7 +23,7 @@ public class BusinessCard {
     private Long id;
 
     @Column(name = "uuid", nullable = false)
-    private String uuid;
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "address_uuid", nullable = false)
     private String addressUuid;
@@ -35,6 +36,9 @@ public class BusinessCard {
 
     @Column(name = "rank", nullable = true)
     private String rank;
+
+    @Column(name = "phone_number", nullable = true)
+    private String phoneNumber;
 
     @Column(name = "company_name", nullable = true)
     private String companyName;

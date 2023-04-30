@@ -21,7 +21,11 @@ public class AddressTransactionService {
     public AddressDto.Create.Response create(final AddressDto.Create.Request request) {
         addressGroupCompositeService.find(request.getGroupUuid());
 
-        return compositeService.create(request);
+        final var created = compositeService.create(request);
+
+        businessCardCompositeService.create(created);
+
+        return new AddressDto.Create.Response(created.getUuid());
     }
 
     @Transactional

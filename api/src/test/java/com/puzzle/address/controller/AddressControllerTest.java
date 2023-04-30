@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Description;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
 
 class AddressControllerTest extends BaseTest {
     private final static String CLASS_URL = "/address";
@@ -75,6 +77,36 @@ class AddressControllerTest extends BaseTest {
                     final var addresses = addressGroups.getJSONArray("group").getJSONObject(0).getJSONArray("address");
 
                     Assertions.assertThat(addresses.length()).isEqualTo(0);
+                })
+        );
+    }
+
+    @Description("address 를 만든다.")
+    @TestFactory
+    public static Collection<DynamicNode> create_address(final List<String> addressUuids) {
+        final var userUuids = new ArrayList<String>();
+        return group(
+                UserControllerTest.create_user(Const.User.USER_NAME, Const.User.PASSWORD, Const.User.EMAIL, userUuids),
+
+                single("만든다.", () -> {
+
+                    final var actual = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);
+
+                    final var addressGroupUuid = actual.getJSONArray("group").getJSONObject(0).getString("uuid");
+
+                    final var body = new JSONObject();
+
+                    body.put("groupUuid", addressGroupUuid);
+                    body.put("name", "newAddress");
+                    body.put("email", Const.User.EMAIL);
+                    body.put("phoneNumber", "01012345678");
+                    body.put("rank", "leader");
+                    body.put("department", "development");
+                    body.put("companyName", "puzzle");
+
+                    final var addressCreated = RestClientFactory.put(CLASS_URL, body);
+
+                    addressUuids.add(addressCreated.getString("uuid"));
                 })
         );
     }

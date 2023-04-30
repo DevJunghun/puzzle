@@ -17,12 +17,8 @@ public class AddressCompositeService {
     private final AddressTrigger addressTrigger;
 
     @Transactional
-    public AddressDto.Create.Response create(final AddressDto.Create.Request request) {
-        final var address = createAddress(request);
-
-        final var created =  service.create(address);
-
-        return new AddressDto.Create.Response(created.getUuid());
+    public Address create(final AddressDto.Create.Request request) {
+        return createAddress(request);
     }
 
     @Transactional

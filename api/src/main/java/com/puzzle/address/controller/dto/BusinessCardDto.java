@@ -16,6 +16,7 @@ public class BusinessCardDto {
             private String email;
             private String name;
             private String rank;
+            private String phoneNumber;
             private String companyName;
             private String companyUrl;
             private String companyAddress;
@@ -26,6 +27,7 @@ public class BusinessCardDto {
                 response.setEmail(businessCard.getEmail());
                 response.setName(businessCard.getName());
                 response.setRank(businessCard.getRank());
+                response.setPhoneNumber(businessCard.getPhoneNumber());
                 response.setCompanyName(businessCard.getCompanyName());
                 response.setCompanyUrl(businessCard.getCompanyUrl());
                 response.setCompanyAddress(businessCard.getCompanyAddress());
@@ -42,6 +44,7 @@ public class BusinessCardDto {
             @Email
             private String email;
             private String rank;
+            private String phoneNumber;
             private String companyName;
             private String companyUrl;
             private String companyAddress;

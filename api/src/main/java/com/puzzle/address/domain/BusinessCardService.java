@@ -13,6 +13,13 @@ import java.time.LocalDateTime;
 public class BusinessCardService {
     private final BusinessCardRepository repository;
 
+    public BusinessCard create(final BusinessCard businessCard) {
+        businessCard.setCreatedAt(LocalDateTime.now());
+        businessCard.setUpdatedAt(LocalDateTime.now());
+
+        return repository.save(businessCard);
+    }
+
     public BusinessCard find(final String uuid, final BooleanDelete deleted, final BooleanValidate validate){
         BusinessCard businessCard;
 
