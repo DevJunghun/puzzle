@@ -1,16 +1,16 @@
 package com.puzzle.address.controller.dto;
 
-import com.puzzle.address.domain.BusinessCard;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class BusinessCardDto {
     public static class Get {
         @Getter
         @NoArgsConstructor
+        @Schema(name = "BusinessCardDto.Get.Response")
         public static class Response {
             private String email;
             private String name;
@@ -34,6 +34,7 @@ public class BusinessCardDto {
 
     public static class Update {
         @Getter
+        @Schema(name = "BusinessCardDto.Update.Request")
         public static class Request {
             @NotEmpty
             private String name;
@@ -50,6 +51,7 @@ public class BusinessCardDto {
 
     @Getter
     @NoArgsConstructor
+    @Schema(name = "BusinessCardDto.BusinessCard")
     public static class BusinessCard {
         private String uuid;
         private String name;

@@ -1,7 +1,7 @@
 package com.puzzle.address.controller.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,7 @@ public class AddressDto {
 
     public static class Create {
         @Getter
+        @Schema(name = "AddressDto.Create.Request")
         public static class Request {
             @NotEmpty
             private String groupUuid;
@@ -34,6 +35,7 @@ public class AddressDto {
 
         @AllArgsConstructor
         @Getter
+        @Schema(name = "AddressDto.Create.Response")
         public static class Response {
             private String uuid;
         }
@@ -42,6 +44,7 @@ public class AddressDto {
     public static class Get {
         @Setter
         @Getter
+        @Schema(name = "AddressDto.Create.Response")
         public static class Response {
             private String name;
             private String email;
@@ -56,6 +59,7 @@ public class AddressDto {
 
     public static class Update {
         @Getter
+        @Schema(name = "AddressDto.Update.Request")
         public static class Request {
             @Length(max = 20)
             private String name;
