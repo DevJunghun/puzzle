@@ -19,20 +19,17 @@ public class AuthenticateCompositeService {
     private final AuthLogCompositeService authLogCompositeService;
     private final BCryptPasswordEncoder encoder;
 
-    public AuthenticateDto.LogIn.Response authenticate(final AuthenticateDto.LogIn.Request request, final String ip) {
+    public String authenticate(final AuthenticateDto.LogIn.Request request, final String ip) {
         final var user = findUserAndValidate(request, ip);
 
         validCredential(user, request, ip);
 
         authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, true, ip, null);
-        return new AuthenticateDto.LogIn.Response("token");
+
+        return user.getUuid();
     }
 
-    public void logOut(final String userToken, final String ip) {
-        //get userUuid from token table
-        final var userUuid = "userUuid";
-        final var user = userCompositeService.findByUuid(userUuid);
-
+    public void logOut(final User user, final String ip) {
         authLogCompositeService.create(user.getUuid(), AuthType.LOGOUT, true, ip, null);
     }
 

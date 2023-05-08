@@ -2,6 +2,7 @@ package com.puzzle.address.domain;
 
 import com.puzzle.address.controller.dto.AddressGroupDto;
 import com.puzzle.api.util.BooleanDelete;
+import com.puzzle.iam.domain.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ public class AddressGroupTransactionService {
     private final AddressCompositeService addressCompositeService;
 
     @Transactional
-    public AddressGroupDto.GetAllGroups.Response findAll(final String userUuid) {
-        final var groups = service.findAll(userUuid, BooleanDelete.FALSE);
+    public AddressGroupDto.GetAllGroups.Response findAll(final User user) {
+        final var groups = service.findAll(user.getUuid(), BooleanDelete.FALSE);
 
         final var groupDtos = groups.stream()
                 .map(this::getGroupDto)

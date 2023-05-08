@@ -5,6 +5,9 @@ public class ExceptionCode {
         final public static String UNKNOWN_EXCEPTION = "Unknown Exception";
         final public static String ILLEGAL_ENUM_STRING_EXCEPTION = "Illegal Enum Value";
     }
+    public static class UserToken{
+        final public static String USER_TOKEN_NOT_FOUND_EXCEPTION = "User Token Not Found";
+    }
 
     public static class User{
         final public static String USER_NOT_FOUND_EXCEPTION = "User Not Found";

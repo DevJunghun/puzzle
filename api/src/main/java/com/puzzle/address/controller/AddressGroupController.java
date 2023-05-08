@@ -3,6 +3,7 @@ package com.puzzle.address.controller;
 import com.puzzle.address.domain.AddressGroupCompositeService;
 import com.puzzle.address.controller.dto.AddressGroupDto;
 import com.puzzle.address.domain.AddressGroupTransactionService;
+import com.puzzle.iam.domain.UserTokenTransactionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -12,39 +13,53 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.puzzle.api.session.UserTokenHeader.HEADER_KEY;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/address-group/{userUuid}", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/address-group", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Slf4j
 public class AddressGroupController {
+    private final UserTokenTransactionService userTokenTransactionService;
     private final AddressGroupCompositeService compositeService;
     private final AddressGroupTransactionService transactionService;
 
     @GetMapping("/")
-    public AddressGroupDto.GetAllGroups.Response getAll(final @PathVariable String userUuid) {
-        return transactionService.findAll(userUuid);
+    public AddressGroupDto.GetAllGroups.Response getAll(@RequestHeader(HEADER_KEY) String userToken) {
+        final var user = userTokenTransactionService.findUser(userToken);
+
+        return transactionService.findAll(user);
     }
 
     @PutMapping("/")
-    public AddressGroupDto.CreateParentGroup.Response createParent(final @PathVariable String userUuid, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
-        return compositeService.createParentGroup(userUuid, request);
+    public AddressGroupDto.CreateParentGroup.Response createParent(final @RequestHeader(HEADER_KEY) String userToken, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
+        final var user = userTokenTransactionService.findUser(userToken);
+
+        return compositeService.createParentGroup(user, request);
     }
 
     @PutMapping("/{groupUuid}")
-    public AddressGroupDto.CreateParentGroup.Response createChild(final @PathVariable String userUuid, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
-        return compositeService.createChildGroup(userUuid, groupUuid, request);
+    public AddressGroupDto.CreateParentGroup.Response createChild(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
+        final var user = userTokenTransactionService.findUser(userToken);
+
+        return compositeService.createChildGroup(user, groupUuid, request);
     }
 
     @PatchMapping("/{groupUuid}")
-    public void update(final @PathVariable String userUuid, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.UpdateGroup.Request request) {
-        compositeService.update(userUuid, groupUuid, request);
+    public void update(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.UpdateGroup.Request request) {
+        final var user = userTokenTransactionService.findUser(userToken);
+
+        compositeService.update(user, groupUuid, request);
     }
 
     @DeleteMapping("/{groupUuid}")
-    public void delete(final @PathVariable String userUuid, final @PathVariable String groupUuid) {
-        compositeService.delete(userUuid, groupUuid);
+    public void delete(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid) {
+        final var user = userTokenTransactionService.findUser(userToken);
+
+        compositeService.delete(user, groupUuid);
     }
 }
