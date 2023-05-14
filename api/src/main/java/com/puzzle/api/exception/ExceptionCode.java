@@ -16,6 +16,7 @@ public class ExceptionCode {
         final public static String INVALID_CREDENTIAL_EXCEPTION = "Invalid Credential";
         final public static String ALREADY_EXIST_USER_EXCEPTION = "Already Exist User";
         final public static String ALREADY_EXIST_USER_EMAIL_EXCEPTION = "Already Exist User email";
+        final public static String USER_LOCKED_EXCEPTION = "User Locked";
     }
 
     public static class UserEmail {

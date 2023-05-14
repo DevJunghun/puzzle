@@ -5,10 +5,10 @@ import com.puzzle.api.util.BooleanDelete;
 import com.puzzle.api.util.BooleanValidate;
 import com.puzzle.iam.controller.dto.AuthenticateDto;
 import com.puzzle.iam.domain.exceptions.InvalidCredentialException;
+import com.puzzle.iam.domain.exceptions.UserLockedException;
 import com.puzzle.iam.domain.exceptions.UserNotExistException;
 import com.puzzle.iam.type.AuthType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,7 @@ public class AuthenticateCompositeService {
     public String authenticate(final AuthenticateDto.LogIn.Request request, final String ip) {
         final var user = findUserAndValidate(request, ip);
 
+        validLocked(user, ip);
         validCredential(user, request, ip);
 
         authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, true, ip, null);
@@ -46,9 +47,26 @@ public class AuthenticateCompositeService {
 
     private void validCredential(final User user, final AuthenticateDto.LogIn.Request request, final String ip) {
         if (!encoder.matches(user.getPassword(), request.getPassword())) {
-            authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.INVALID_CREDENTIAL_EXCEPTION);
-            //todo: if wrong many times?
+            if (getFailTime(user) >= 5) {
+                //todo: lock user
+                authLogCompositeService.create(user.getUuid(), AuthType.LOCKED, true, ip, null);
+            } else {
+                authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.INVALID_CREDENTIAL_EXCEPTION);
+            }
+
+
             throw new InvalidCredentialException();
+        }
+    }
+
+    private int getFailTime(final User user) {
+        return authLogCompositeService.failTimeCount(user) + 1;
+    }
+
+    private void validLocked(final User user, final String ip) {
+        if (user.isLocked()) {
+            authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.USER_LOCKED_EXCEPTION);
+            throw new UserLockedException(user.getUsername());
         }
     }
 }
