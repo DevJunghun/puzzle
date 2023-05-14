@@ -11,7 +11,7 @@ import java.util.List;
 public interface AuthLogRepository extends JpaRepository<AuthLog, String> {
     int countAllByUserUuidAndSuccessIsFalseAndCreatedAtIsAfter(final String userUuid, final LocalDateTime createdAt);
 
-    int countAllByUserUuidAndTypeAndSuccessIsFalseAndCreatedAtIsAfter(final String userUuid, final AuthType type, final LocalDateTime createdAt)
+    int countAllByUserUuidAndTypeAndSuccessIsFalseAndCreatedAtIsAfter(final String userUuid, final AuthType type, final LocalDateTime createdAt);
 
     AuthLog findFirstByUserUuidAndTypeAndSuccessIsFalseOrderByCreatedAtDesc(final String userUuid, final AuthType type);
     List<AuthLog> findAllByUserUuidAndTypeAndSuccessIsFalseOrderByCreatedAtDesc(final String userUuid, final AuthType type);
