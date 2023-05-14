@@ -48,12 +48,13 @@ public class AuthenticateCompositeService {
     private void validCredential(final User user, final AuthenticateDto.LogIn.Request request, final String ip) {
         if (!encoder.matches(user.getPassword(), request.getPassword())) {
             if (getFailTime(user) >= 5) {
-                //todo: lock user
+                user.setLocked(true);
+                userCompositeService.lock(user);
+
                 authLogCompositeService.create(user.getUuid(), AuthType.LOCKED, true, ip, null);
             } else {
                 authLogCompositeService.create(user.getUuid(), AuthType.LOGIN, false, ip, ExceptionCode.User.INVALID_CREDENTIAL_EXCEPTION);
             }
-
 
             throw new InvalidCredentialException();
         }

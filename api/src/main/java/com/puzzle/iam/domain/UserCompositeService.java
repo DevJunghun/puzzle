@@ -68,6 +68,12 @@ public class UserCompositeService {
         return service.findByUuid(uuid, BooleanDelete.FALSE, BooleanValidate.TRUE);
     }
 
+    @Transactional
+    public void lock(final User user) {
+        user.setLocked(true);
+        service.save(user);
+    }
+
     private String changePassword(final User user) {
         final var newPassword = randomPassword.pwd();
 
