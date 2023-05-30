@@ -22,6 +22,16 @@ public class UserTokenService {
         return userToken;
     }
 
+    public UserToken findByUserUuid(final String userUuid, final BooleanValidate validate) {
+        final var userToken =  repository.findByUserToken(userUuid);
+
+        if (validate.isTrue() && userToken == null) {
+            throw new UserTokenNotFoundException(userUuid);
+        }
+
+        return userToken;
+    }
+
     public UserToken create(final String userUuid) {
         final var userToken = new UserToken();
 

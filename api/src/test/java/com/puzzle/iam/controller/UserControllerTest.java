@@ -16,7 +16,7 @@ public class UserControllerTest extends BaseTest {
     private final static String CLASS_URL = "/user";
     private final static String CREATE_USER_URL = CLASS_URL + "/sign-up";
 
-    @Description("유저 로그인 테스트")
+    @Description("유저 생성 테스트")
     @TestFactory
     Collection<DynamicNode> create_user() {
         final var usernames = new ArrayList<String>();

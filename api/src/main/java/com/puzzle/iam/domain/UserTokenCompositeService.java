@@ -5,8 +5,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class UserTokenCompositeService {
@@ -19,7 +17,7 @@ public class UserTokenCompositeService {
 
     @Transactional
     public UserToken login(final String userUuid) {
-        final var userToken = find(userUuid);
+        final var userToken = service.findByUserUuid(userUuid, BooleanValidate.FALSE);
 
         if (userToken == null) {
             return service.create(userUuid);
@@ -27,7 +25,4 @@ public class UserTokenCompositeService {
             return service.update(userToken);
         }
     }
-
-
-
 }

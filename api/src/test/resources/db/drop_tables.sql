@@ -16,3 +16,4 @@ drop table if exists receive_reminders;
 drop table if exists send_reminders;
 drop table if exists highlights;
 drop table if exists poll_results;
+drop table if exists user_tokens;

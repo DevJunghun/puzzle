@@ -125,10 +125,8 @@ public class UserCompositeService {
     }
 
     private void assignUserData(final User user, final SignInDto.Create.Request request) {
-        final var encodedPwd = new BCryptPasswordEncoder().encode(request.getPwd());
-
         user.setUsername(request.getUsername());
-        user.setPassword(encodedPwd);
+        user.setPassword(new BCryptPasswordEncoder().encode(request.getPwd()));
         user.setEmail(request.getEmail());
         user.setDeleted(false);
     }

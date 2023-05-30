@@ -3,6 +3,8 @@ package com.puzzle.iam.domain;
 import com.puzzle.iam.type.AuthType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,13 +25,11 @@ public class AuthLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", nullable = false)
-    private String uuid = UUID.randomUUID().toString();
-
     @Column(name = "user_uuid", nullable = true)
     private String userUuid;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private AuthType type;
 
     @Column(name = "success", nullable = false)

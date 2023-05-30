@@ -168,13 +168,15 @@ create table if not exists templates
 create table if not exists auth_logs
 (
     id bigint not null auto_increment,
-    user_uuid     varchar(36) not null,
-    type          ENUM('LOGIN', 'LOGOUT') not null,
+    user_uuid     varchar(36) null,
+    type          ENUM('LOGIN', 'LOGOUT', 'LOCKED') not null,
     success       tinyint     not null default 1,
+    ip            varchar(50) not null,
     error_message text null,
+    `created_at` datetime(6) NOT NULL,
 
     primary key (id)
-);
+    );
 
 create table if not exists reminders
 (

@@ -46,7 +46,7 @@ public class AuthenticateCompositeService {
     }
 
     private void validCredential(final User user, final AuthenticateDto.LogIn.Request request, final String ip) {
-        if (!encoder.matches(user.getPassword(), request.getPassword())) {
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
             if (getFailTime(user) >= 5) {
                 user.setLocked(true);
                 userCompositeService.lock(user);
