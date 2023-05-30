@@ -2,7 +2,6 @@ package com.puzzle.address.controller;
 
 import com.puzzle.RestClientFactory;
 import com.puzzle.api.BaseTest;
-import com.puzzle.iam.controller.AuthenticateController;
 import com.puzzle.iam.controller.AuthenticateControllerTest;
 import com.puzzle.iam.controller.UserControllerTest;
 import com.puzzle.utils.Const;
@@ -22,7 +21,6 @@ class AddressControllerTest extends BaseTest {
     @Description("address 에 대한 CRUD 를 테스트 한다.")
     @TestFactory
     Collection<DynamicNode> crud_test_for_address() {
-        final var userUuids = new ArrayList<String>();
         final var userTokens = new ArrayList<String>();
         final var addressGroupUuids = new ArrayList<String>();
         final var addressUuids = new ArrayList<String>();
@@ -31,7 +29,7 @@ class AddressControllerTest extends BaseTest {
                 AuthenticateControllerTest.login(userTokens),
 
                 single("addressgroup의 uuid 를 하나 가져온다.", () -> {
-                    final var actual = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);
+                    final var actual = RestClientFactory.get("/address-group" + "/" , null, userTokens.get(0));
 
                     final var addressGroupUuid = actual.getJSONArray("group").getJSONObject(0).getString("uuid");
                     addressGroupUuids.add(addressGroupUuid);
@@ -80,7 +78,7 @@ class AddressControllerTest extends BaseTest {
                 single("address delete", () -> {
                     RestClientFactory.delete(CLASS_URL + "/" + addressUuids.get(0));
 
-                    final var addressGroups = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);
+                    final var addressGroups = RestClientFactory.get("/address-group" + "/", null, userTokens.get(0));
                     final var addresses = addressGroups.getJSONArray("group").getJSONObject(0).getJSONArray("address");
 
                     Assertions.assertThat(addresses.length()).isEqualTo(0);
