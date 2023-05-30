@@ -25,7 +25,7 @@ public class UserCompositeService {
     private static final String PWD_REGEX = "(\\d+[A-z]+)|([A-z]+\\d+)";
 
     @Transactional
-    public SignInDto.Create.Response signIn(final SignInDto.Create.Request request) {
+    public SignInDto.Create.Response signUp(final SignInDto.Create.Request request) {
         validWhenCreate(request);
 
         final var userUuid = createUser(request);

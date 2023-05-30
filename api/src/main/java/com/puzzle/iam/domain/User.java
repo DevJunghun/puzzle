@@ -37,7 +37,7 @@ public class User {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    @Column(name = "locekd", nullable = false)
+    @Column(name = "locked", nullable = false)
     private boolean locked = false;
 
     @Column(name = "created_at", nullable = false)

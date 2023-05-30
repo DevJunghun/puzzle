@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserCompositeService compositeService;
 
-    @PutMapping(value = "/sign-in")
-    public SignInDto.Create.Response signIn(final @Valid @RequestBody SignInDto.Create.Request request) {
-        return compositeService.signIn(request);
+    @PutMapping(value = "/sign-up")
+    public SignInDto.Create.Response signUp(final @Valid @RequestBody SignInDto.Create.Request request) {
+        return compositeService.signUp(request);
     }
 
     @GetMapping("/lost-username/{email}")
