@@ -2,6 +2,8 @@ package com.puzzle.address.controller;
 
 import com.puzzle.RestClientFactory;
 import com.puzzle.api.BaseTest;
+import com.puzzle.iam.controller.AuthenticateController;
+import com.puzzle.iam.controller.AuthenticateControllerTest;
 import com.puzzle.iam.controller.UserControllerTest;
 import com.puzzle.utils.Const;
 import org.assertj.core.api.Assertions;
@@ -21,11 +23,12 @@ class AddressControllerTest extends BaseTest {
     @TestFactory
     Collection<DynamicNode> crud_test_for_address() {
         final var userUuids = new ArrayList<String>();
+        final var userTokens = new ArrayList<String>();
         final var addressGroupUuids = new ArrayList<String>();
         final var addressUuids = new ArrayList<String>();
 
         return group(
-                UserControllerTest.create_user(Const.User.USER_NAME, Const.User.PASSWORD, Const.User.EMAIL, userUuids),
+                AuthenticateControllerTest.login(userTokens),
 
                 single("addressgroup의 uuid 를 하나 가져온다.", () -> {
                     final var actual = RestClientFactory.get("/address-group" + "/" + userUuids.get(0) + "/", null);

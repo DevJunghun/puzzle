@@ -13,10 +13,9 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class AuthenticateControllerTest extends BaseTest {
+public class AuthenticateControllerTest extends BaseTest {
     private final static String CLASS_URL = "/authenticate";
     private final static String LOGIN_URL = CLASS_URL + "/auth";
 
@@ -120,4 +119,26 @@ class AuthenticateControllerTest extends BaseTest {
                 })
         );
     }
+
+    static public DynamicNode login(final List<String> userTokens) {
+        final var userUuids = new ArrayList<String>();
+
+        return group("로그인을 한다.",
+                UserControllerTest.create_user(Const.User.USER_NAME, Const.User.PASSWORD, Const.User.EMAIL, userUuids),
+
+                single("정상적으로 로그인한다.", () -> {
+                    final var postRequest = new JSONObject();
+
+                    postRequest.put("username", Const.User.USER_NAME);
+                    postRequest.put("password", Const.User.PASSWORD);
+
+                    final var actual = RestClientFactory.post(LOGIN_URL, postRequest);
+
+                    org.assertj.core.api.Assertions.assertThat(actual.get("userToken")).isNotNull().isNotEqualTo("");
+
+                    userTokens.add(actual.getString("userToken"));
+                })
+        );
+    }
 }
+

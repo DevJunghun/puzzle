@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import static com.puzzle.api.session.UserTokenHeader.HEADER_KEY;
+
 public class RestClientFactory {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RestClientFactory.class);
     private static final String BASE_URL = "http://localhost:8080";
@@ -23,6 +25,17 @@ public class RestClientFactory {
             handleException(rawResponse, uri, HttpMethod.GET.name());
             return rawResponse.bodyToMono(Object.class);
         }).block();
+        return getJsonObject(response);
+    }
+
+    public static JSONObject get(final String uri, final MultiValueMap<String, String> params, final String userToken) {
+        final var client = client();
+        final var response = client.get().uri(uriBuilder -> uriBuilder.path(uri).queryParams(params).build())
+                .header(HEADER_KEY, userToken)
+                .exchangeToMono(rawResponse -> {
+                    handleException(rawResponse, uri, HttpMethod.GET.name());
+                    return rawResponse.bodyToMono(Object.class);
+                }).block();
         return getJsonObject(response);
     }
 
@@ -54,6 +67,20 @@ public class RestClientFactory {
 
         final var jsonObject = getJsonObject(response);
         handleException(jsonObject, expectExceptionClass);
+    }
+
+    public static JSONObject put(final String uri, final JSONObject body, final String userToken) {
+        final var client = client();
+
+        final var response = client.put().uri(uri).contentType(MediaType.APPLICATION_JSON)
+                .header(HEADER_KEY, userToken)
+                .body(BodyInserters.fromValue(body.toString())).exchangeToMono(rawResponse -> {
+            handleException(rawResponse, uri, HttpMethod.PUT.name());
+
+            return rawResponse.bodyToMono(Object.class);
+        }).block();
+
+        return getJsonObject(response);
     }
 
     public static JSONObject put(final String uri, final JSONObject body) {
@@ -90,6 +117,20 @@ public class RestClientFactory {
         return getJsonObject(response);
     }
 
+    public static JSONObject patch(final String uri, final JSONObject body, final String userToken) {
+        final var client = client();
+
+        final var response = client.patch().uri(uri).contentType(MediaType.APPLICATION_JSON)
+                .header(HEADER_KEY, userToken)
+                .body(BodyInserters.fromValue(body.toString())).exchangeToMono(rawResponse -> {
+            handleException(rawResponse, uri, HttpMethod.PUT.name());
+
+            return rawResponse.bodyToMono(Object.class);
+        }).block();
+
+        return getJsonObject(response);
+    }
+
     public static void patchAssertFail(final String uri, final JSONObject body, final Class expectExceptionClass) {
         final var client = client();
 
@@ -104,6 +145,20 @@ public class RestClientFactory {
         final var client = client();
 
         final var response = client.delete().uri(uri).exchangeToMono(rawResponse -> {
+            handleException(rawResponse, uri, HttpMethod.DELETE.name());
+
+            return rawResponse.bodyToMono(Object.class);
+        }).block();
+
+        return getJsonObject(response);
+    }
+
+    public static JSONObject delete(final String uri, final String userToken) {
+        final var client = client();
+
+        final var response = client.delete().uri(uri)
+                .header(HEADER_KEY, userToken)
+                .exchangeToMono(rawResponse -> {
             handleException(rawResponse, uri, HttpMethod.DELETE.name());
 
             return rawResponse.bodyToMono(Object.class);

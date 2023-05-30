@@ -2,7 +2,7 @@ package com.puzzle.address.controller;
 
 import com.puzzle.RestClientFactory;
 import com.puzzle.api.BaseTest;
-import com.puzzle.iam.controller.UserControllerTest;
+import com.puzzle.iam.controller.AuthenticateControllerTest;
 import com.puzzle.utils.Const;
 import org.json.JSONObject;
 import org.junit.jupiter.api.DynamicNode;
@@ -23,12 +23,13 @@ class AddressGroupControllerTest extends BaseTest {
     @Description("유저를 생성하면 default address group 이 생성되어야 한다.")
     @TestFactory
     Collection<DynamicNode> create_user_create_default_address_group() {
-        final var userUuids = new ArrayList<String>();
+        final var userTokens = new ArrayList<String>();
+
         return group(
-                UserControllerTest.create_user(Const.User.USER_NAME, Const.User.PASSWORD, Const.User.EMAIL, userUuids),
+                AuthenticateControllerTest.login(userTokens),
 
                 single("default address group 이 생성되었는지 확인한다.", () -> {
-                    final var actual = RestClientFactory.get(CLASS_URL + "/" + userUuids.get(0) + GET_ALL, null);
+                    final var actual = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
                     org.assertj.core.api.Assertions
                             .assertThat(actual
@@ -43,21 +44,21 @@ class AddressGroupControllerTest extends BaseTest {
     @Description("새로운 address group 을 생성하고 createChild, update, delete 를 테스트한다.")
     @TestFactory
     Collection<DynamicNode> crud_test_for_parent_group() {
-        final var userUuids = new ArrayList<String>();
+        final var userTokens = new ArrayList<String>();
         final var groupUuids = new ArrayList<String>();
 
         return group(
-                UserControllerTest.create_user(Const.User.USER_NAME, Const.User.PASSWORD, Const.User.EMAIL, userUuids),
+                AuthenticateControllerTest.login(userTokens),
 
                 single("parent address group 을 생성한다.", () -> {
                     final var body = new JSONObject();
 
                     body.put("name", "Parent");
 
-                    final var actual = RestClientFactory.put(CLASS_URL + "/" + userUuids.get(0) + CREATE_PARENT, body);
+                    final var actual = RestClientFactory.put(CLASS_URL + CREATE_PARENT, body, userTokens.get(0));
                     org.assertj.core.api.Assertions.assertThat(actual.get("uuid")).isNotNull();
 
-                    final var parentGroups = RestClientFactory.get(CLASS_URL + "/" + userUuids.get(0) + GET_ALL, null).getJSONArray("group");
+                    final var parentGroups = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0)).getJSONArray("group");
                     org.assertj.core.api.Assertions.assertThat(parentGroups.length()).isEqualTo(2);
 
                     for (int i = 0; i < parentGroups.length(); i++) {
@@ -73,7 +74,7 @@ class AddressGroupControllerTest extends BaseTest {
 
                             body.put("name", "Child");
 
-                            final var actual = RestClientFactory.put(CLASS_URL + "/" + userUuids.get(0) + "/" + groupUuids.get(1), body);
+                            final var actual = RestClientFactory.put(CLASS_URL + "/" + groupUuids.get(1), body, userTokens.get(0));
 
                             org.assertj.core.api.Assertions.assertThat(actual.get("uuid")).isNotNull();
 
@@ -81,7 +82,7 @@ class AddressGroupControllerTest extends BaseTest {
                         }),
 
                         single("그 때 get all test", () -> {
-                            final var actual = RestClientFactory.get(CLASS_URL + "/" + userUuids.get(0) + GET_ALL, null);
+                            final var actual = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
                             final var newGroup = actual.getJSONArray("group").getJSONObject(1);
                             final var newChildGroup = newGroup.getJSONArray("innerGroupNames");
@@ -100,9 +101,9 @@ class AddressGroupControllerTest extends BaseTest {
 
                     body.put("name", "Child2");
 
-                    RestClientFactory.patch(CLASS_URL + "/" + userUuids.get(0) + "/" + groupUuids.get(2), body);
+                    RestClientFactory.patch(CLASS_URL + "/" + groupUuids.get(2), body, userTokens.get(0));
 
-                    final var actual = RestClientFactory.get(CLASS_URL + "/" + userUuids.get(0) + GET_ALL, null);
+                    final var actual = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
                     final var newGroup = actual.getJSONArray("group").getJSONObject(1);
                     final var newChildGroup = newGroup.getJSONArray("innerGroupNames");
@@ -117,9 +118,9 @@ class AddressGroupControllerTest extends BaseTest {
 
                 single("child group delete", () -> {
 
-                    final var actual = RestClientFactory.delete(CLASS_URL + "/" + userUuids.get(0) + "/" + groupUuids.get(2));
+                    final var actual = RestClientFactory.delete(CLASS_URL + "/" + groupUuids.get(2), userTokens.get(0));
 
-                    final var groups = RestClientFactory.get(CLASS_URL + "/" + userUuids.get(0) + GET_ALL, null);
+                    final var groups = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
                     final var newGroup = groups.getJSONArray("group").getJSONObject(1);
 
