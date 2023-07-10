@@ -26,28 +26,41 @@ public class AddressGroupTransactionService {
         return new AddressGroupDto.GetAllGroups.Response(groupDtos);
     }
 
-    private AddressGroupDto.Group getGroupDto(final AddressGroup group) {
-        final var groupDto = new AddressGroupDto.Group(group.getName(), group.getUuid(), null, null);
+    @Transactional
+    public AddressGroupDto.GetAllGroups.Response findAll2(final User user) {
+        final var groups = service.findAll(user.getUuid(), BooleanDelete.FALSE);
 
-        assignAddressInGroup(groupDto, group);
-        assignInnerGroupInGroup(groupDto, group);
+        final var groupDtos = groups.stream()
+                .map(this::getGroupDto)
+                .toList();
+
+        return new AddressGroupDto.GetAllGroups.Response(groupDtos);
+    }
+
+    private AddressGroupDto.Group getGroupDto(final AddressGroup group) {
+        final var groupDto = new AddressGroupDto.Group(group.getName(), group.getUuid(), null, null, 0);
+
+        assignAddress(groupDto, group);
+        assignInnerGroup(groupDto, group);
 
         return groupDto;
 
     }
 
-    private void assignAddressInGroup(final AddressGroupDto.Group groupDto, final AddressGroup group) {
+    private void assignAddress(final AddressGroupDto.Group groupDto, final AddressGroup group) {
         final var addresses = getAllAddressInGroup(group);
         groupDto.setAddress(addresses);
+        groupDto.setSize(addresses.size());
     }
 
-    private void assignInnerGroupInGroup(final AddressGroupDto.Group groupDto, final AddressGroup group) {
-        final var groupInGroup = findAllByParentGroup(group.getUuid());
-        final var nameOfGroupInGroup = groupInGroup == null ? null : groupInGroup.stream()
-                .map(AddressGroupDto.Group::getName)
+    private void assignInnerGroup(final AddressGroupDto.Group groupDto, final AddressGroup group) {
+        final var groupInGroups = findAllByParentGroup(group.getUuid());
+        final var groupDtos = groupInGroups.stream()
+                .map(this::getGroupDto)
                 .toList();
 
-        groupDto.setInnerGroupNames(nameOfGroupInGroup);
+        groupDto.setInnerGroups(groupDtos.size() == 0 ? null : groupDtos);
+        groupDto.addAllAddressSize(groupDtos);
     }
 
     private List<AddressGroupDto.Address> getAllAddressInGroup(final AddressGroup group) {
@@ -57,16 +70,7 @@ public class AddressGroupTransactionService {
                 .toList();
     }
 
-    private List<AddressGroupDto.Group> findAllByParentGroup(final String parentUuid) {
-        final var groups = service.findAllByParentGroup(parentUuid, BooleanDelete.FALSE);
-
-        if (groups.size() == 0) {
-            return null;
-        }
-
-        return groups.stream()
-                .map(this::getGroupDto)
-                .toList();
-
+    private List<AddressGroup> findAllByParentGroup(final String parentUuid) {
+        return service.findAllByParentGroup(parentUuid, BooleanDelete.FALSE);
     }
 }

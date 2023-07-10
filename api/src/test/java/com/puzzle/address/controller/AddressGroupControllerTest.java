@@ -85,13 +85,44 @@ class AddressGroupControllerTest extends BaseTest {
                             final var actual = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
                             final var newGroup = actual.getJSONArray("group").getJSONObject(1);
-                            final var newChildGroup = newGroup.getJSONArray("innerGroupNames");
+                            final var newChildGroup = newGroup.getJSONArray("innerGroups");
+                            groupUuids.add(newChildGroup.getJSONObject(0).getString("uuid"));
 
                             assertAll(
                                     () -> org.assertj.core.api.Assertions.assertThat(newGroup.getString("name")).isEqualTo("Parent"),
                                     () -> org.assertj.core.api.Assertions.assertThat(newChildGroup).isNotNull(),
                                     () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.length()).isEqualTo(1),
-                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.getString(0)).isEqualTo("Child")
+                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.getJSONObject(0).getString("name")).isEqualTo("Child"),
+                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.getJSONObject(0).getInt("size")).isEqualTo(0)
+                            );
+                        })
+                ),
+
+                group("새로 생성한 parent address group의 child group의 childe group를 생성된다.",
+                        single("생성 테스트", () -> {
+                            final var body = new JSONObject();
+
+                            body.put("name", "ChildChild");
+
+                            final var actual = RestClientFactory.put(CLASS_URL + "/" + groupUuids.get(2), body, userTokens.get(0));
+
+                            org.assertj.core.api.Assertions.assertThat(actual.get("uuid")).isNotNull();
+
+                            groupUuids.add(actual.getString("uuid"));
+                        }),
+
+                        single("그 때 get all test", () -> {
+                            final var actual = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
+
+                            final var newGroup = actual.getJSONArray("group").getJSONObject(1);
+                            final var newChildGroup = newGroup.getJSONArray("innerGroups").getJSONObject(0).getJSONArray("innerGroups");
+
+                            assertAll(
+                                    () -> org.assertj.core.api.Assertions.assertThat(newGroup.getString("name")).isEqualTo("Parent"),
+                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup).isNotNull(),
+                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.length()).isEqualTo(1),
+                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.getJSONObject(0).getString("name")).isEqualTo("ChildChild"),
+                                    () -> org.assertj.core.api.Assertions.assertThat(newChildGroup.getJSONObject(0).getInt("size")).isEqualTo(0)
                             );
                         })
                 ),
@@ -101,12 +132,12 @@ class AddressGroupControllerTest extends BaseTest {
 
                     body.put("name", "Child2");
 
-                    RestClientFactory.patch(CLASS_URL + "/" + groupUuids.get(2), body, userTokens.get(0));
+                    RestClientFactory.patch(CLASS_URL + "/" + groupUuids.get(3), body, userTokens.get(0));
 
                     final var actual = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
                     final var newGroup = actual.getJSONArray("group").getJSONObject(1);
-                    final var newChildGroup = newGroup.getJSONArray("innerGroupNames");
+                    final var newChildGroup = newGroup.getJSONArray("innerGroups");
 
                     assertAll(
                             () -> org.assertj.core.api.Assertions.assertThat(newGroup.getString("name")).isEqualTo("Parent"),
@@ -118,7 +149,7 @@ class AddressGroupControllerTest extends BaseTest {
 
                 single("child group delete", () -> {
 
-                    final var actual = RestClientFactory.delete(CLASS_URL + "/" + groupUuids.get(2), userTokens.get(0));
+                    final var actual = RestClientFactory.delete(CLASS_URL + "/" + groupUuids.get(3), userTokens.get(0));
 
                     final var groups = RestClientFactory.get(CLASS_URL + GET_ALL, null, userTokens.get(0));
 
@@ -126,7 +157,7 @@ class AddressGroupControllerTest extends BaseTest {
 
                     assertAll(
                             () -> org.assertj.core.api.Assertions.assertThat(newGroup.getString("name")).isEqualTo("Parent"),
-                            () -> org.assertj.core.api.Assertions.assertThat(String.valueOf(newGroup.get("innerGroupNames"))).isEqualTo("null")
+                            () -> org.assertj.core.api.Assertions.assertThat(String.valueOf(newGroup.get("innerGroups"))).isEqualTo("null")
                     );
                 })
 

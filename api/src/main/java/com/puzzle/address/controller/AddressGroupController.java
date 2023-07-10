@@ -32,7 +32,9 @@ public class AddressGroupController {
     public AddressGroupDto.GetAllGroups.Response getAll(@RequestHeader(HEADER_KEY) String userToken) {
         final var user = userTokenTransactionService.findUser(userToken);
 
-        return transactionService.findAll(user);
+//        return transactionService.findAll(user);
+        return transactionService.findAll2(user);
+
     }
 
     @PutMapping("/")

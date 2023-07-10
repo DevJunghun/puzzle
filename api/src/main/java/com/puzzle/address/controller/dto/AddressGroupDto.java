@@ -19,10 +19,10 @@ public class AddressGroupDto {
         }
     }
 
-    public static class CreateParentGroup{
+    public static class CreateParentGroup {
         @Getter
         @Schema(name = "AddressGroupDto.CreateParentGroup.Request")
-        public static class Request{
+        public static class Request {
             @NotEmpty
             @Max(20)
             private String name;
@@ -31,7 +31,7 @@ public class AddressGroupDto {
         @AllArgsConstructor
         @Getter
         @Schema(name = "AddressGroupDto.CreateParentGroup.Response")
-        public static class Response{
+        public static class Response {
             private String uuid;
         }
     }
@@ -50,17 +50,24 @@ public class AddressGroupDto {
     @Setter
     @Getter
     @Schema(name = "AddressGroupDto.Group")
-    public static class Group{
+    public static class Group {
         private String name;
         private String uuid;
-        private List<String> innerGroupNames;
+        private List<Group> innerGroups;
         private List<Address> address;
+        private int size;
+
+        public void addAllAddressSize(final List<Group> groups) {
+            groups.forEach(group -> {
+                this.size += group.getSize();
+            });
+        }
     }
 
     @AllArgsConstructor
     @Getter
     @Schema(name = "AddressGroupDto.Address")
-    public static class Address{
+    public static class Address {
         private String name;
         private String uuid;
     }
