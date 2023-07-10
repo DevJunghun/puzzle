@@ -5,4 +5,4 @@ docker build -t puzzle-api -f ../../Dockerfile .
 cd ../../
 ./gradlew dbDown
 ./gradlew dbUp
-docker run puzzle-api
+docker run -p 8080:8080  puzzle-api
