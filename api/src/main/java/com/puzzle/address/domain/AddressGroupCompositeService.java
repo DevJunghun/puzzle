@@ -32,7 +32,7 @@ public class AddressGroupCompositeService {
     }
 
     @Transactional
-    public AddressGroupDto.CreateParentGroup.Response createParentGroup(final User user, final AddressGroupDto.CreateParentGroup.Request request) {
+    public AddressGroupDto.Response createParentGroup(final User user, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createParentGroup(user.getUuid(), request.getName());
         final var savedGroup = service.create(group);
 
@@ -40,7 +40,7 @@ public class AddressGroupCompositeService {
     }
 
     @Transactional
-    public AddressGroupDto.CreateParentGroup.Response createChildGroup(final User user, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
+    public AddressGroupDto.Response createChildGroup(final User user, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createChildGroup(user.getUuid(), groupUuid, request.getName());
         final var savedGroup = service.create(group);
 

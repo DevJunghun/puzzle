@@ -29,39 +29,37 @@ public class AddressGroupController {
     private final AddressGroupTransactionService transactionService;
 
     @GetMapping("/")
-    public AddressGroupDto.GetAllGroups.Response getAll(@RequestHeader(HEADER_KEY) String userToken) {
+    public AddressGroupDto.Response getAll(@RequestHeader(HEADER_KEY) String userToken) {
         final var user = userTokenTransactionService.findUser(userToken);
 
-//        return transactionService.findAll(user);
-        return transactionService.findAll2(user);
-
+        return transactionService.findAll(user);
     }
 
     @PutMapping("/")
-    public AddressGroupDto.CreateParentGroup.Response createParent(final @RequestHeader(HEADER_KEY) String userToken, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
+    public AddressGroupDto.Response createParent(final @RequestHeader(HEADER_KEY) String userToken, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
         final var user = userTokenTransactionService.findUser(userToken);
 
-        return compositeService.createParentGroup(user, request);
+        return transactionService.createParentGroup(user, request);
     }
 
     @PutMapping("/{groupUuid}")
-    public AddressGroupDto.CreateParentGroup.Response createChild(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
+    public AddressGroupDto.Response createChild(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.CreateParentGroup.Request request) {
         final var user = userTokenTransactionService.findUser(userToken);
 
-        return compositeService.createChildGroup(user, groupUuid, request);
+        return transactionService.createChildGroup(user, groupUuid, request);
     }
 
     @PatchMapping("/{groupUuid}")
-    public void update(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.UpdateGroup.Request request) {
+    public AddressGroupDto.Response update(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid, final @RequestBody AddressGroupDto.UpdateGroup.Request request) {
         final var user = userTokenTransactionService.findUser(userToken);
 
-        compositeService.update(user, groupUuid, request);
+        return transactionService.update(user, groupUuid, request);
     }
 
     @DeleteMapping("/{groupUuid}")
-    public void delete(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid) {
+    public AddressGroupDto.Response delete(final @RequestHeader(HEADER_KEY) String userToken, final @PathVariable String groupUuid) {
         final var user = userTokenTransactionService.findUser(userToken);
 
-        compositeService.delete(user, groupUuid);
+        return transactionService.delete(user, groupUuid);
     }
 }

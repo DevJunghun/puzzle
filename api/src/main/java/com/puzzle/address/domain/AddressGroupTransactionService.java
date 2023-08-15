@@ -13,28 +13,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AddressGroupTransactionService {
     private final AddressGroupService service;
+    private final AddressGroupCompositeService compositeService;
     private final AddressCompositeService addressCompositeService;
 
     @Transactional
-    public AddressGroupDto.GetAllGroups.Response findAll(final User user) {
+    public AddressGroupDto.Response findAll(final User user) {
         final var groups = service.findAll(user.getUuid(), BooleanDelete.FALSE);
 
         final var groupDtos = groups.stream()
                 .map(this::getGroupDto)
                 .toList();
 
-        return new AddressGroupDto.GetAllGroups.Response(groupDtos);
+        return new AddressGroupDto.Response(groupDtos);
     }
 
     @Transactional
-    public AddressGroupDto.GetAllGroups.Response findAll2(final User user) {
-        final var groups = service.findAll(user.getUuid(), BooleanDelete.FALSE);
+    public AddressGroupDto.Response createParentGroup(final User user, final AddressGroupDto.CreateParentGroup.Request request) {
+        compositeService.createParentGroup(user, request);
 
-        final var groupDtos = groups.stream()
-                .map(this::getGroupDto)
-                .toList();
+        return findAll(user);
+    }
 
-        return new AddressGroupDto.GetAllGroups.Response(groupDtos);
+    @Transactional
+    public AddressGroupDto.Response createChildGroup(final User user, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
+        compositeService.createChildGroup(user, groupUuid, request);
+
+        return findAll(user);
+    }
+
+    @Transactional
+    public AddressGroupDto.Response update(final User user, final String groupUuid, final AddressGroupDto.UpdateGroup.Request request) {
+        compositeService.update(user, groupUuid, request);
+
+        return findAll(user);
+    }
+
+    @Transactional
+    public AddressGroupDto.Response delete(final User user, final String groupUuid) {
+        compositeService.delete(user, groupUuid);
+
+        return findAll(user);
     }
 
     private AddressGroupDto.Group getGroupDto(final AddressGroup group) {

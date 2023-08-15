@@ -10,6 +10,13 @@ import lombok.Setter;
 import java.util.List;
 
 public class AddressGroupDto {
+    @AllArgsConstructor
+    @Getter
+    @Schema(name = "AddressGroupDto.AddressGroup.Response")
+    public static class Response {
+        private List<Group> groups;
+    }
+
     public static class GetAllGroups {
         @AllArgsConstructor
         @Getter
