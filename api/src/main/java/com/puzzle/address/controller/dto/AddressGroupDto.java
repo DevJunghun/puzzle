@@ -34,13 +34,6 @@ public class AddressGroupDto {
             @Max(20)
             private String name;
         }
-
-        @AllArgsConstructor
-        @Getter
-        @Schema(name = "AddressGroupDto.CreateParentGroup.Response")
-        public static class Response {
-            private String uuid;
-        }
     }
 
     public static class UpdateGroup {

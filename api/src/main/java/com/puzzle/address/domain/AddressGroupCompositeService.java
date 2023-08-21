@@ -22,29 +22,21 @@ public class AddressGroupCompositeService {
     }
 
     @Transactional
-    public AddressGroupDto.CreateParentGroup.Response createDefaultGroup(final String userUuid) {
+    public void createDefaultGroup(final String userUuid) {
         final var group = createParentGroup(userUuid, DEFAULT_GROUP_NAME);
         group.setDefaultGroup(true);
-
-        final var savedGroup = service.create(group);
-
-        return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
     @Transactional
-    public AddressGroupDto.Response createParentGroup(final User user, final AddressGroupDto.CreateParentGroup.Request request) {
+    public void createParentGroup(final User user, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createParentGroup(user.getUuid(), request.getName());
         final var savedGroup = service.create(group);
-
-        return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
     @Transactional
-    public AddressGroupDto.Response createChildGroup(final User user, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
+    public void createChildGroup(final User user, final String groupUuid, final AddressGroupDto.CreateParentGroup.Request request) {
         final var group = createChildGroup(user.getUuid(), groupUuid, request.getName());
         final var savedGroup = service.create(group);
-
-        return new AddressGroupDto.CreateParentGroup.Response(savedGroup.getUuid());
     }
 
     @Transactional
